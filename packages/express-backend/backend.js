@@ -31,10 +31,16 @@ app.post("/users", (req, res) => {
 });
   
 app.delete("/users/:id", (req, res) => {
-    const userToDelete = req.params["userId"];
-    userService.deleteUser(userToDelete);
-    res.status(204).send();
-});
+  const id = req.params["id"];
+  if (id === undefined)
+  {
+    res.status(404).send("Resource not found")
+  } else {
+    userService.deleteUserById(id).then(() => {
+    res.status(204).send("Successful delete");}
+    )
+  ;
+}});
 
 app.listen(port, () => {
   console.log(
