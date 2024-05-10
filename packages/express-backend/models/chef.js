@@ -1,15 +1,12 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import menuItem from "./menuItem.js"
 
 dotenv.config()
 
+
 const ChefSchema = new mongoose.Schema(
   {
-    chefId: {
-        type: String,
-        required: true,
-        unique: true
-    },
     email: {
         type: String,
         required: true,
@@ -39,10 +36,6 @@ const ChefSchema = new mongoose.Schema(
         type: [String],
         required: false
     },
-    menu: { //adding menuItem collection later 
-        type: [String],
-        required: false
-    },
     rating: {
       type: Number,
       required: false
@@ -52,5 +45,7 @@ const ChefSchema = new mongoose.Schema(
 );
 
 const Chef = mongoose.model("Chef", ChefSchema);
+
+
 
 export default Chef;
