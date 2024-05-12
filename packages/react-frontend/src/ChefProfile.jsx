@@ -1,5 +1,6 @@
 // src/Form.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // code for file upload is borrowed from pluralsight.com
 function FileUploader({onFileSelect})
@@ -16,6 +17,7 @@ function FileUploader({onFileSelect})
 
 function ChefProfile(props)
 {
+    const navigate = useNavigate();
     const [profile, setProfile] = useState({
         chefId: "",
         firstName: "",
@@ -42,6 +44,7 @@ function ChefProfile(props)
         setProfile({ chefId: "", firstName: "", lastName: "", 
                     address: "", phoneNumber: "", specialities: "", 
                     menu: "", profilePic: null});
+        navigate('/createProfileDone');
     }
 
     return (

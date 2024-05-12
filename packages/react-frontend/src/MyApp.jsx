@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import ChefProfile from './ChefProfile';
 import HomePage from './HomePage'
 import Layout from './Layout';
+import ProfileDone from './ProfileDone';
 import {
   BrowserRouter as Router,
   Route,
@@ -19,15 +20,12 @@ function MyApp() {
 
  
   return (
-    // <div className="container">
-    //   <ChefProfile handleSubmit={updateList} />
-    // </div>
-
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/createProfile"  element={<ChefProfile handleSubmit={updateList}/>} />
+          <Route path="/createProfileDone"  element={<ProfileDone/>} />
         </Route>
       </Routes>
         {/* <Routes>
