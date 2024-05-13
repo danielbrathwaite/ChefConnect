@@ -10,8 +10,15 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
+// homepage stuff
 app.get("/", (req, res) => {
   res.send("Welcome to ChefConnect!");
+});
+
+//basic search function
+app.get("/search", (req, res) => {
+  const searchQuery = req.query.name; 
+  const searchResults = chefService.findChefByName(searchQuery)
 });
 
 app.get("/users/:id", (req, res) => {
@@ -45,10 +52,21 @@ app.delete("/users/:id", (req, res) => {
 
 app.get("/chefs/:id", (req, res) => {
   const id = req.params["id"];
-  chefService.findChefById(id).then((result) => {
-    if (result === undefined || result === null)
+  chefService.findChefById(id).then((chef) => {
+    if (chef === undefined || chef === null)
       res.status(404).send("Resource not found.");
-    else res.send({ chefs_list: result });
+    else {
+      //for loop for calculating average rating
+    let averageRating = 0;
+    if (chef.reviews.length > 0) {
+      let totalRating = 0;
+      for (let i = 0; i < chef.reviews.length; i++) {
+          totalRating += chef.reviews[i].rating;
+      }
+        averageRating = totalRating / chef.reviews.length;
+    }
+    
+    res.send({ chefs_list: chef, averageRating: averageRating.toFixed(2) });}
   });
 });
 

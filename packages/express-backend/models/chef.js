@@ -3,6 +3,27 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
+//Review schema for embedding into chefschema
+const ReviewSchema = new mongoose.Schema({
+  /*reviewer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',  
+      required: true
+  },*/
+  rating: {
+      type: Number,
+      required: true
+  },
+  comment: {
+      type: String,
+      required: false
+  },
+  date: {
+      type: Date,
+      default: Date.now
+  }
+});
+
 
 const ChefSchema = new mongoose.Schema(
   {
@@ -35,9 +56,9 @@ const ChefSchema = new mongoose.Schema(
         type: [String],
         required: false
     },
-    rating: {
-      type: Number,
-      required: false
+    reviews: {
+        type: [ReviewSchema],
+        required: false
     }
   },
   { collection: "chefs_list" }

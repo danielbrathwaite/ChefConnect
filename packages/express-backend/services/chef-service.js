@@ -47,6 +47,10 @@ function findChefByName(name) {
   return chefModel.find({ name: name });
 }
 
+function findChefByFirstOrLastName(name) {
+  return chefModel.find({ firstName: name });
+}
+
 function findChefByJob(job) {
   return chefModel.find({ job: job });
 }
@@ -62,5 +66,6 @@ export default {
   findChefByName,
   findChefByJob,
   findChefByNameAndJob,
+  findChefByFirstOrLastName,
   deleteChefById
 };
