@@ -41,6 +41,7 @@ function ChefProfile(props)
     function submitProfile() 
     {
         props.handleSubmit(profile);
+        console.log(profile);
         setProfile({ chefId: "", firstName: "", lastName: "", 
                     address: "", phoneNumber: "", specialities: "", 
                     menu: "", profilePic: null});

@@ -12,6 +12,9 @@ const Layout = () => {
           <li>
             <Link to="/createProfile">Become a Chef</Link>
           </li>
+          <li>
+            <Link to="/hireChef">Hire a Chef</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
