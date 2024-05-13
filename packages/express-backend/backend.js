@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import userService from "./services/user-service.js";
+import chefService from "./services/chef-service.js";
 
 const app = express();
 const port = 8000;
@@ -41,6 +42,50 @@ app.delete("/users/:id", (req, res) => {
     )
   ;
 }});
+
+app.get("/chefs/:id", (req, res) => {
+  const id = req.params["id"];
+  chefService.findChefById(id).then((result) => {
+    if (result === undefined || result === null)
+      res.status(404).send("Resource not found.");
+    else res.send({ chefs_list: result });
+  });
+});
+
+app.post("/chefs", (req, res) => {
+  const chef = req.body;
+  chefService.addChef(chef).then((savedChef) => {
+    if (savedChef) res.status(201).send(savedChef);
+    else res.status(500).end();
+  });
+});
+
+app.get("/chefs", (req, res) => {
+  const name = req.query.name;
+  const job = req.query.job;
+  chefService
+  .getChefs(name, job)
+  .then((result) => {
+    res.send({ chefs_list: result });
+  })
+  .catch((error) => {
+    console.log(error);
+    res.status(500).send("An error ocurred in the server.");
+  });
+});
+
+app.delete("/chefs/:id", (req, res) => {
+const id = req.params["id"];
+if (id === undefined)
+{
+  res.status(404).send("Resource not found")
+} else {
+  chefService.deleteChefById(id).then(() => {
+  res.status(204).send("Successful delete");}
+  )
+;
+}});
+
 
 app.listen(port, () => {
   console.log(

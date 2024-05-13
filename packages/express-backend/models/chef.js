@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import menuItem from "./menuItem.js"
 
 dotenv.config()
 

@@ -6,7 +6,7 @@ dotenv.config()
 const menuItemSchema = new mongoose.Schema(
   {
     chef: { 
-        type: Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'Chef',
         required: true },
     foodName: {
