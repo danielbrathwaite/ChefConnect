@@ -24,7 +24,7 @@ function ChefProfile(props)
         lastName: "",
         address: "",
         phoneNumber: "",
-        specialities: "",
+        cuisine: "",
         menu: "",
         profilePic: null
         }
@@ -43,7 +43,7 @@ function ChefProfile(props)
         props.handleSubmit(profile);
         console.log(profile);
         setProfile({ chefId: "", firstName: "", lastName: "", 
-                    address: "", phoneNumber: "", specialities: "", 
+                    address: "", phoneNumber: "", cuisine: "", 
                     menu: "", profilePic: null});
         navigate('/createProfileDone');
     }
@@ -84,14 +84,21 @@ function ChefProfile(props)
             value={profile.phoneNumber}
             onChange={handleChange}
           />  
-          <label htmlFor="specialities">Specialities:</label>
-          <input
+          <label htmlFor="cuisine">Cuisine(s):</label>
+          <select name="cuisine" id="cuisine" value="ChefProfile.cuisine" onChange={handleChange}> 
+            <option value="american">American</option> 
+            <option value="italian">Italian</option> 
+            <option value="indian">Indian</option> 
+            <option value="thai">Thai</option> 
+            <option value="greek">Greek</option> 
+          </select>
+          {/* <input
             type="text"
-            name="specialities"
-            id="specialities"
-            value={profile.specialities}
+            name="cuisine"
+            id="cuisine"
+            value={profile.cuisine}
             onChange={handleChange}
-          />
+          /> */}
           <label htmlFor="menu">Menu:</label>
           <input
             type="text"
