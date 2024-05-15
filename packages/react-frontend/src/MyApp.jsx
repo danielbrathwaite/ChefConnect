@@ -25,7 +25,7 @@ function MyApp() {
   const INVALID_TOKEN = "INVALID_TOKEN";
   const [token, setToken] = useState(INVALID_TOKEN);
   const [message, setMessage] = useState("");
-  const API_PREFIX = "http://localhost:5173";
+  const API_PREFIX = "http://localhost:8000";
 
   useEffect(() => {
     fetchUsers()
