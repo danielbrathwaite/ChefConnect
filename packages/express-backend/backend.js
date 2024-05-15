@@ -16,6 +16,16 @@ app.get("/", (req, res) => {
   res.send("Welcome to ChefConnect!");
 });
 
+app.get("/users", (req, res) => {
+  userServices.getAllUsers()
+  .then ((result) => {
+    res.send({users_list: result})})
+  .catch(error => {
+      console.error("Error fetching users:", error);
+      res.status(500).send("Internal Server Error");
+    });
+});
+
 //basic search function
 app.get("/search", (req, res) => {
   const searchQuery = req.query.name; 
