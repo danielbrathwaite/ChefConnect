@@ -105,13 +105,13 @@ if (id === undefined)
 ;
 }});
 
+app.post("/signup", registerUser);
+
+app.post("/login", registerUser);
+
 
 app.listen(port, () => {
   console.log(
     `Example app listening at http://localhost:${port}`
   );
 });
-
-app.post("/signup", registerUser);
-
-app.post("/login", registerUser);
