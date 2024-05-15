@@ -3,6 +3,7 @@ import cors from "cors";
 
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
+import { authenticateUser, registerUser } from "./auth.js";
 
 const app = express();
 const port = 8000;
@@ -30,7 +31,7 @@ app.get("/users/:id", (req, res) => {
     });
 });
   
-app.post("/users", (req, res) => {
+app.post("/users", authenticateUser, (req, res) => {
     const user = req.body;
     userService.addUser(user).then((savedUser) => {
       if (savedUser) res.status(201).send(savedUser);
@@ -110,3 +111,7 @@ app.listen(port, () => {
     `Example app listening at http://localhost:${port}`
   );
 });
+
+app.post("/signup", registerUser);
+
+app.post("/login", registerUser);

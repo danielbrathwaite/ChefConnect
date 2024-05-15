@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Login(props) {
+function SignUp(props) {
   const [creds, setCreds] = useState({
     username: "",
     pwd: ""
@@ -8,7 +8,7 @@ function Login(props) {
 
   return (
     <form>
-      <label htmlFor="username">UserName</label>
+      <label htmlFor="username">UserName (email) </label>
       <input
         type="text"
         name="username"
@@ -49,4 +49,4 @@ function Login(props) {
     setCreds({ username: "", pwd: "" });
   }
 }
-export default Login;
+export default SignUp;

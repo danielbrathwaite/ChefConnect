@@ -17,7 +17,6 @@ function FileUploader({onFileSelect})
 
 function ChefProfile(props)
 {
-    const navigate = useNavigate();
     const [profile, setProfile] = useState({
         chefId: "",
         firstName: "",
@@ -45,12 +44,10 @@ function ChefProfile(props)
         setProfile({ chefId: "", firstName: "", lastName: "", 
                     address: "", phoneNumber: "", cuisine: "", 
                     menu: "", profilePic: null});
-        navigate('/createProfileDone');
     }
 
     return (
         <div>
-        <h1>To get cooking, create a Profile</h1>
         <form>
           <label htmlFor="firstName">First Name:</label>
           <input
@@ -86,7 +83,6 @@ function ChefProfile(props)
           />  
           <label htmlFor="cuisine">Cuisine(s):</label>
           <select name="cuisine" id="cuisine" value="ChefProfile.cuisine" onChange={handleChange}> 
-            <option value="american">American</option> 
             <option value="italian">Italian</option> 
             <option value="indian">Indian</option> 
             <option value="thai">Thai</option> 
@@ -109,7 +105,8 @@ function ChefProfile(props)
           />
           <label htmlFor="profilePic">Profile Picture:</label>
           <FileUploader onFileSelect={(file) => setProfile({ ...profile, profilePic: file })}/>
-          <input type="button" value="Submit" onClick={submitProfile} />
+          {location.pathname === "/profile" && (
+            <input type="button" value="Submit" onClick={submitProfile} />)}
         </form>
         </div>
       );

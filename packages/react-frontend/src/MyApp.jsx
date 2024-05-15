@@ -5,18 +5,19 @@ import HomePage from './HomePage'
 import Layout from './Layout';
 import ProfileDone from './ProfileDone';
 import Login from './Login';
+import { useNavigate } from "react-router-dom";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Link
 } from "react-router-dom";
+import SignUp from './SignUp';
 
 
 
 function MyApp() {
   const [chefProfiles, setChefProfiles] = useState([]);
-
   const updateList = (newChefProfile) => {
     setChefProfiles([...chefProfiles, newChefProfile]);
   };
@@ -26,24 +27,21 @@ function MyApp() {
   const [message, setMessage] = useState("");
   const API_PREFIX = "http://localhost:5173";
 
-  function fetchUsers() {
-    const promise = fetch(`${API_PREFIX}/users`, {
-      headers: addAuthHeader()
-    });
-  
-    return promise;
-  }
+  useEffect(() => {
+    fetchUsers()
+    .then((res) =>
+      res.status === 200 ? res.json() : undefined
+    )
+    .then((json) => {
+      if (json) {
+        setChefProfiles(json["users_list"]);
+      } else {
+        setChefProfiles(null);
+      }
+    })
+      .catch((error) => { console.log(error); });
+  }, [] );
 
-  function addAuthHeader(otherHeaders = {}) {
-    if (token === INVALID_TOKEN) {
-      return otherHeaders;
-    } else {
-      return {
-        ...otherHeaders,
-        Authorization: `Bearer ${token}`
-      };
-    }
-  }
 
   function loginUser(creds) {
     const promise = fetch(`${API_PREFIX}/login`, {
@@ -86,8 +84,7 @@ function MyApp() {
             .json()
             .then((payload) => setToken(payload.token));
           setMessage(
-            `Signup successful for user: ${creds.username}; auth token saved`
-          );
+            `Signup successful for user: ${creds.username}; auth token saved`);
         } else {
           setMessage(
             `Signup Error ${response.status}: ${response.data}`
@@ -100,7 +97,7 @@ function MyApp() {
   
     return promise;
   }
-  
+
   function fetchUsers() {
     const promise = fetch(`${API_PREFIX}/users`, {
       headers: addAuthHeader()
@@ -108,27 +105,26 @@ function MyApp() {
   
     return promise;
   }
-  
-  function addAuthHeader(otherHeaders = {}) {
-    if (token === INVALID_TOKEN) {
-      return otherHeaders;
-    } else {
-      return {
-        ...otherHeaders,
-        Authorization: `Bearer ${token}`
-      };
-    }
+
+function addAuthHeader(otherHeaders = {}) {
+  if (token === INVALID_TOKEN) {
+    return otherHeaders;
+  } else {
+    return {
+      ...otherHeaders,
+      Authorization: `Bearer ${token}`
+    };
   }
+}
  
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/createProfile"  element={<ChefProfile handleSubmit={updateList}/>} />
-          <Route path="/createProfileDone"  element={<ProfileDone/>} />
+          <Route path="/profile"  element={<ChefProfile handleSubmit={updateList}/>} />
           <Route path="/login"element={<Login handleSubmit={loginUser} />} />
-          <Route path="/signup"element={<Login handleSubmit={signupUser} buttonLabel="Sign Up" />}/>
+          <Route path="/signup"element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />}/>
         </Route>
       </Routes>
     </Router>
