@@ -27,8 +27,13 @@ app.get("/users", (req, res) => {
 });
 
 //basic search function, right now only checks if query matches firstName or lastName
+// plan: when nothing is filtered, send the entire list
+// figure out how to send the available filters while the customers are searching
+// edit findChefByName
 app.get("/search", (req, res) => {
-  const searchQuery = req.query.name; 
+  const { name, cuisine, minPrice, maxPrice, minRating } = req.query;
+  //preset filters
+  cuisineFilters =  ["American", "Italian", "French"];
   const searchResults = chefService.findChefByName(searchQuery)
   searchResults.then((result) => {
     if (result === undefined || result === null)

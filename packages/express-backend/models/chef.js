@@ -52,7 +52,7 @@ const ChefSchema = new mongoose.Schema(
         type: String,
         required: false
     },
-    specialties: {
+    cuisines: {
         type: [String],
         required: false
     },

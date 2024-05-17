@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import chefModel from "../models/chef.js";
+import chefListModel from "../models/chefList.js";
 import menuItem from "../models/menuItem.js";
 import dotenv from "dotenv";
 
@@ -48,7 +49,7 @@ function findChefByName(searchName) {
   //if searching a full name
   const searchTerms = searchName.split(/\s+/);
   if (searchTerms.length > 1){
-    return chefModel.find({
+    return chefListModel.find({
       $or: [
         { firstName: { $regex: new RegExp(searchTerms[0], 'i') }, 
         lastName: { $regex: new RegExp(searchTerms[1], 'i') } }
@@ -57,7 +58,7 @@ function findChefByName(searchName) {
   }
   //if searching only one word
   else {
-  return chefModel.find({
+  return chefListModel.find({
     $or: [
         { firstName: { $regex: searchRegex } },
         { lastName: { $regex: searchRegex } }
