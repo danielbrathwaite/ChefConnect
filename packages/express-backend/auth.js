@@ -19,6 +19,7 @@ export function registerUser(req, res) {
             console.log("Token:", token);
             res.status(201).send({ token: token });
             creds.push({ username, hashedPassword });
+            console.log(creds);
           });
         });
     }
