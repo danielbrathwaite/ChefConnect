@@ -26,11 +26,16 @@ app.get("/users", (req, res) => {
     });
 });
 
-//basic search function
+//basic search function, right now only checks if query matches firstName or lastName
 app.get("/search", (req, res) => {
   const searchQuery = req.query.name; 
   const searchResults = chefService.findChefByName(searchQuery)
-});
+  searchResults.then((result) => {
+    if (result === undefined || result === null)
+      res.status(404).send("Resource not found.");
+    else res.send({ users_list: result });
+  });
+  });
 
 app.get("/users/:id", (req, res) => {
     const id = req.params["userId"];
