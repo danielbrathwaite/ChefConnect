@@ -13,10 +13,22 @@ import {
   Link
 } from "react-router-dom";
 import SignUp from './SignUp';
+import SearchPage from './SearchPage';
 
 
 
 function MyApp() {
+  const [chefData, setChefData] = useState([
+    {
+      firstName: "Chef",
+      lastName: "Bob", // the rest of the data
+      price:"$",
+      cuisines: "Italian",
+      location: "New York",
+      rating:"5 stars"
+    }
+  ]
+  );
   const [chefProfiles, setChefProfiles] = useState([]);
   const updateList = (newChefProfile) => {
     setChefProfiles([...chefProfiles, newChefProfile]);
@@ -120,12 +132,13 @@ function addAuthHeader(otherHeaders = {}) {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/search" element={<SearchPage chefData={chefData} />}></Route>
+          {/* <Route index element={<HomePage />} />
           <Route path="/profile"  element={<ChefProfile handleSubmit={updateList}/>} />
           <Route path="/login"element={<Login handleSubmit={loginUser} />} />
           <Route path="/signup"element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />}/>
-        </Route>
+          <Route path="/search" element={<SearchPage/>}/> */}
       </Routes>
     </Router>
   );
