@@ -1,9 +1,12 @@
-import express from "express";
+import express, { query } from "express";
 import cors from "cors";
 
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
+import chefList from "./models/chefList.js";
+import Chef from "./models/chef.js";
+
 
 const app = express();
 const port = 8000;
@@ -26,20 +29,44 @@ app.get("/users", (req, res) => {
     });
 });
 
-//basic search function, right now only checks if query matches firstName or lastName
-// plan: when nothing is filtered, send the entire list
-// figure out how to send the available filters while the customers are searching
-// edit findChefByName
-app.get("/search", (req, res) => {
-  const { name, cuisine, minPrice, maxPrice, minRating } = req.query;
-  //preset filters
-  cuisineFilters =  ["American", "Italian", "French"];
-  const searchResults = chefService.findChefByName(searchQuery)
-  searchResults.then((result) => {
-    if (result === undefined || result === null)
-      res.status(404).send("Resource not found.");
-    else res.send({ users_list: result });
-  });
+
+app.get("/search", async (req, res) => {
+  try{
+    const { firstName, lastName, cuisines } = req.query;
+    const query = {};
+
+    if(firstName){
+      query.firstName = new RegExp(firstName, 'i');
+    }
+
+    if(lastName){
+      query.lastName = new RegExp(lastName, 'i');
+    }
+
+    if(cuisines){
+      query.cuisines = cuisines;
+    }
+
+    // if(minPrice && maxPrice){
+    //   query.price = {$gte: minPrice, $lte: maxPrice};
+    // }
+    // else if (minPrice){
+    //   query.price = {$gte: minPrice};
+    // }
+    // else if (maxPrice){
+    //   query.price = {$lte: maxPrice};
+    // }
+
+    // if(minRating){
+    //   query.rating = {$gte: minRating};
+    // }
+
+    const chef_results = await Chef.find(query);
+    res.json(chef_results);
+  }
+  catch(error){
+    res.status(500).send(error.message)
+  }
   });
 
 app.get("/users/:id", (req, res) => {

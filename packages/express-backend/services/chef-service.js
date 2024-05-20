@@ -44,28 +44,28 @@ function deleteChefById(id) {
 }
 
 
-function findChefByName(searchName) {
-  const searchRegex = new RegExp(searchName, 'i');
-  //if searching a full name
-  const searchTerms = searchName.split(/\s+/);
-  if (searchTerms.length > 1){
-    return chefListModel.find({
-      $or: [
-        { firstName: { $regex: new RegExp(searchTerms[0], 'i') }, 
-        lastName: { $regex: new RegExp(searchTerms[1], 'i') } }
-      ]
-    })
-  }
-  //if searching only one word
-  else {
-  return chefListModel.find({
-    $or: [
-        { firstName: { $regex: searchRegex } },
-        { lastName: { $regex: searchRegex } }
-    ]
-});
-  }
-}
+// function searchChefByName(searchName) {
+//   const searchRegex = new RegExp(searchName, 'i');
+//   //if searching a full name
+//   const searchTerms = searchName.split(/\s+/);
+//   if (searchTerms.length > 1){
+//     return chefListModel.find({
+//       $or: [
+//         { firstName: { $regex: new RegExp(searchTerms[0], 'i') }, 
+//         lastName: { $regex: new RegExp(searchTerms[1], 'i') } }
+//       ]
+//     })
+//   }
+//   //if searching only one word
+//   else {
+//   return chefListModel.find({
+//     $or: [
+//         { firstName: { $regex: searchRegex } },
+//         { lastName: { $regex: searchRegex } }
+//     ]
+// });
+//   }
+// }
 
 function findChefByJob(job) {
   return chefModel.find({ job: job });
@@ -79,7 +79,6 @@ export default {
   addChef,
   getChefs,
   findChefById,
-  findChefByName,
   findChefByJob,
   findChefByNameAndJob,
   deleteChefById
