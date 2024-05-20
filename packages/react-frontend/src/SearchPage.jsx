@@ -1,5 +1,18 @@
 import React from "react";
 
+function ChefCard({ chef }) {
+  return (
+    <div className="card">
+      <h2>{chef.firstName} {chef.lastName}</h2>
+      <p>Price: {chef.price}</p>
+      <p>Cuisines: {chef.cuisines}</p>
+      <p>Location: {chef.location}</p>
+      <p>Rating: {chef.rating}</p>
+      <button>Menu</button>
+    </div>
+  );
+}
+
 function PageHeader(props)
 {
     return(
@@ -29,6 +42,7 @@ function TableHeader() {
           <th>Price</th>
           <th>Cuisines</th>
           <th>Location</th>
+          <th>Rating</th>
         </tr>
       </thead>
     );
@@ -43,6 +57,12 @@ function TableBody(props) {
             <td>{row.price}</td>
             <td>{row.cuisines}</td>
             <td>{row.location}</td>
+            <td>{row.rating}</td>
+            <td>
+            <button>
+              Menu
+            </button>
+          </td>
           </tr>
       );
      }
@@ -60,10 +80,15 @@ function SearchPage(props)
     return(
         <div>
             <PageHeader/>
-            <center>
+                <center>
                 <TableHeader></TableHeader>
                 <TableBody chefData={props.chefData}/>
-            </center>
+                </center>
+                {/* <div className="card-container">
+                  {props.chefData.map((chef, index) => (
+                    <ChefCard key={index} chef={chef} />
+                  ))}
+                </div> */}
         </div>
         );
 

@@ -977,7 +977,7 @@
    */
   table {
     border-collapse: collapse;
-    border-spacing: 0;
+    border-spacing: 10;
     width: 100%;
     max-width: 100%;
   }
@@ -1005,7 +1005,10 @@
     caption-side: bottom;
     color: #ababab;
   }
-  
+  .table-container {
+    display: flex;
+    justify-content: center;
+  }
   .striped-table tbody tr:nth-child(odd) {
     background-color: #f8f8f8;
   }
@@ -1019,7 +1022,31 @@
       width: 100%;
     }
   }
+  /*
+  * Cards
+  */
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .card h2 {
+    margin: 0;
+    font-size: 1.5em;
+  }
   
+  .card p {
+    margin: 5px 0;
+  }
   /*
    * Navigation
    */

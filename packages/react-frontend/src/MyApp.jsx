@@ -25,7 +25,7 @@ function MyApp() {
       price:"$",
       cuisines: "Italian",
       location: "New York",
-      rating:"5 stars"
+      rating:"5"
     },
     {
       firstName: "Chef",
@@ -33,8 +33,33 @@ function MyApp() {
       price:"$$",
       cuisines: "Japanese",
       location: "New York",
-      rating:"5 stars"
+      rating:"5"
+    },
+    {
+      firstName: "Chef",
+      lastName: "Arthur", // the rest of the data
+      price:"$$",
+      cuisines: "American",
+      location: "New York",
+      rating:"5"
+    },
+    {
+      firstName: "Chef",
+      lastName: "Arthur", // the rest of the data
+      price:"$$",
+      cuisines: "American",
+      location: "New York",
+      rating:"5"
+    },
+    {
+      firstName: "Chef",
+      lastName: "Arthur", // the rest of the data
+      price:"$$",
+      cuisines: "American",
+      location: "New York",
+      rating:"5"
     }
+    
   ]
   );
   const [chefProfiles, setChefProfiles] = useState([]);
