@@ -26,6 +26,14 @@ function MyApp() {
       cuisines: "Italian",
       location: "New York",
       rating:"5 stars"
+    },
+    {
+      firstName: "Chef",
+      lastName: "Mia", // the rest of the data
+      price:"$$",
+      cuisines: "Japanese",
+      location: "New York",
+      rating:"5 stars"
     }
   ]
   );
@@ -132,12 +140,10 @@ function addAuthHeader(otherHeaders = {}) {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="/profile"  element={<ChefProfile handleSubmit={updateList}/>} />
           <Route path="/login"element={<Login handleSubmit={loginUser} />} />
           <Route path="/signup"element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />}/>
-        </Route>
+          <Route path="/search" element={<SearchPage chefData={chefData} />} />
       </Routes>
     </Router>
   );
