@@ -132,13 +132,12 @@ function addAuthHeader(otherHeaders = {}) {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/search" element={<SearchPage chefData={chefData} />}></Route>
-          {/* <Route index element={<HomePage />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
           <Route path="/profile"  element={<ChefProfile handleSubmit={updateList}/>} />
           <Route path="/login"element={<Login handleSubmit={loginUser} />} />
           <Route path="/signup"element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />}/>
-          <Route path="/search" element={<SearchPage/>}/> */}
+        </Route>
       </Routes>
     </Router>
   );

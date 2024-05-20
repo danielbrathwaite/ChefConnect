@@ -3,7 +3,7 @@ import cors from "cors";
 
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
-import { authenticateUser, registerUser } from "./auth.js";
+import { authenticateUser, registerUser, loginUser } from "./auth.js";
 
 const app = express();
 const port = 8000;
@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/users", (req, res) => {
-  userServices.getAllUsers()
+  userService.getUsers()
   .then ((result) => {
     res.send({users_list: result})})
   .catch(error => {
@@ -117,7 +117,7 @@ if (id === undefined)
 
 app.post("/signup", registerUser);
 
-app.post("/login", registerUser);
+app.post("/login", loginUser);
 
 
 app.listen(port, () => {
