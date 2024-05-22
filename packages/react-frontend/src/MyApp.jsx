@@ -28,7 +28,7 @@ function MyApp() {
       .then((res) => (res.status === 200 ? res.json() : undefined))
       .then((json) => {
         if (json) {
-          setChefData(json["users_list"]);
+          setChefData(json["chefs_list"]);
         } else {
           setChefData(null);
         }
