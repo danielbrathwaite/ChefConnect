@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function SignUp(props) {
   const [creds, setCreds] = useState({
     username: "",
-    pwd: ""
+    pwd: "",
   });
 
   return (

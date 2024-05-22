@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import userModel from "../models/user.js";
 import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 mongoose.set("debug", true);
 
 mongoose
@@ -20,10 +20,9 @@ function getUsers(name, job) {
     promise = findUserByName(name);
   } else if (job && !name) {
     promise = findUserByJob(job);
-  }
-    else if(name && job){
+  } else if (name && job) {
     promise = findUserByNameAndJob(name, job);
-    }
+  }
   return promise;
 }
 
@@ -41,7 +40,6 @@ function deleteUserById(id) {
   return userModel.findByIdAndDelete(id);
 }
 
-
 function findUserByName(name) {
   return userModel.find({ name: name });
 }
@@ -50,8 +48,8 @@ function findUserByJob(job) {
   return userModel.find({ job: job });
 }
 
-function findUserByNameAndJob(name, job){
-    return userModel.find({name: name, job: job});
+function findUserByNameAndJob(name, job) {
+  return userModel.find({ name: name, job: job });
 }
 
 export default {
@@ -61,5 +59,5 @@ export default {
   findUserByName,
   findUserByJob,
   findUserByNameAndJob,
-  deleteUserById
+  deleteUserById,
 };
