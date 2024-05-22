@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-const multer = require("multer");
+import multer from "multer";
 
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
@@ -12,16 +12,25 @@ cloudinary.config({
   api_key: '743962474496839', 
   api_secret: 'P8WYE5K596_PalkxT6DAGuyx6uE' 
 });
+
 async function handleUpload(file) {
   const res = await cloudinary.uploader.upload(file, {
     resource_type: "auto",
   });
   return res;
 }
-const storage = new Multer.memoryStorage();
-const upload = Multer({
+const storage = new multer.memoryStorage();
+const upload = multer({
   storage,
 });
+
+
+const app = express();
+const port = 8000;
+
+app.use(cors());
+app.use(express.json());
+
 app.post("/upload", upload.single("my_file"), async (req, res) => {
   try {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -35,23 +44,6 @@ app.post("/upload", upload.single("my_file"), async (req, res) => {
     });
   }
 });
-
-const app = express();
-const port = 8000;
-
-app.use(cors());
-app.use(express.json());
-
-cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
-  { public_id: "olympic_flag" }, 
-  function(error, result) {console.log(result); });
-
-  const url = cloudinary.url("olympic_flag", {
-    width: 100,
-    height: 150,
-    crop: 'fill'
-  });
-console.log(url)  
 /////////////////////////
 // Uploads an image file
 /////////////////////////
@@ -74,6 +66,7 @@ const uploadImage = async (imagePath) => {
     console.error(error);
   }
 };
+
 // homepage stuff
 app.get("/", (req, res) => {
   res.send("Welcome to ChefConnect!");
