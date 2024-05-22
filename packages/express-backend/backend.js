@@ -1,9 +1,40 @@
 import express from "express";
 import cors from "cors";
+const multer = require("multer");
 
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+  cloud_name: 'dslmarna0', 
+  api_key: '743962474496839', 
+  api_secret: 'P8WYE5K596_PalkxT6DAGuyx6uE' 
+});
+async function handleUpload(file) {
+  const res = await cloudinary.uploader.upload(file, {
+    resource_type: "auto",
+  });
+  return res;
+}
+const storage = new Multer.memoryStorage();
+const upload = Multer({
+  storage,
+});
+app.post("/upload", upload.single("my_file"), async (req, res) => {
+  try {
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+    const cldRes = await handleUpload(dataURI);
+    res.json(cldRes);
+  } catch (error) {
+    console.log(error);
+    res.send({
+      message: error.message,
+    });
+  }
+});
 
 const app = express();
 const port = 8000;
@@ -11,6 +42,38 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
+cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
+  { public_id: "olympic_flag" }, 
+  function(error, result) {console.log(result); });
+
+  const url = cloudinary.url("olympic_flag", {
+    width: 100,
+    height: 150,
+    crop: 'fill'
+  });
+console.log(url)  
+/////////////////////////
+// Uploads an image file
+/////////////////////////
+const uploadImage = async (imagePath) => {
+
+  // Use the uploaded file's name as the asset's public ID and 
+  // allow overwriting the asset with new versions
+  const options = {
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  };
+
+  try {
+    // Upload the image
+    const result = await cloudinary.uploader.upload(imagePath, options);
+    console.log(result);
+    return result.public_id;
+  } catch (error) {
+    console.error(error);
+  }
+};
 // homepage stuff
 app.get("/", (req, res) => {
   res.send("Welcome to ChefConnect!");

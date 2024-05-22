@@ -34,6 +34,14 @@ const foodOrderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    orderDescription: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        required: true
+    },
     orderDate: {
         type: Date,
         default: Date.now
