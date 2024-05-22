@@ -11,48 +11,7 @@ import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
 
 function MyApp() {
-  const [chefData, setChefData] = useState([
-    {
-      firstName: "Chef",
-      lastName: "Bob", // the rest of the data
-      price: "$",
-      cuisines: "Italian",
-      location: "New York",
-      rating: "5",
-    },
-    {
-      firstName: "Chef",
-      lastName: "Mia", // the rest of the data
-      price: "$$",
-      cuisines: "Japanese",
-      location: "New York",
-      rating: "5",
-    },
-    {
-      firstName: "Chef",
-      lastName: "Arthur", // the rest of the data
-      price: "$$",
-      cuisines: "American",
-      location: "New York",
-      rating: "5",
-    },
-    {
-      firstName: "Chef",
-      lastName: "Arthur", // the rest of the data
-      price: "$$",
-      cuisines: "American",
-      location: "New York",
-      rating: "5",
-    },
-    {
-      firstName: "Chef",
-      lastName: "Arthur", // the rest of the data
-      price: "$$",
-      cuisines: "American",
-      location: "New York",
-      rating: "5",
-    },
-  ]);
+  const [chefData, setChefData] = useState([]);
   const [chefProfiles, setChefProfiles] = useState([]);
   const updateList = (newChefProfile) => {
     setChefProfiles([...chefProfiles, newChefProfile]);
@@ -61,16 +20,17 @@ function MyApp() {
   const INVALID_TOKEN = "INVALID_TOKEN";
   const [token, setToken] = useState(INVALID_TOKEN);
   const [message, setMessage] = useState("");
+
   const API_PREFIX = "http://localhost:8000";
 
   useEffect(() => {
-    fetchUsers()
+    fetchChefs()
       .then((res) => (res.status === 200 ? res.json() : undefined))
       .then((json) => {
         if (json) {
-          setChefProfiles(json["users_list"]);
+          setChefData(json["users_list"]);
         } else {
-          setChefProfiles(null);
+          setChefData(null);
         }
       })
       .catch((error) => {
@@ -133,6 +93,15 @@ function MyApp() {
 
     return promise;
   }
+
+  function fetchChefs() {
+    const promise = fetch(`${API_PREFIX}/chefs`, {
+      headers: addAuthHeader(),
+    });
+
+    return promise;
+  }
+
 
   function addAuthHeader(otherHeaders = {}) {
     if (token === INVALID_TOKEN) {

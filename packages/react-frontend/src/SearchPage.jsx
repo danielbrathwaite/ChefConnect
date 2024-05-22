@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 function ChefCard({ chef }) {
   return (
@@ -69,18 +69,19 @@ function TableBody(props) {
 }
 
 function SearchPage(props) {
+  console.log(props.chefData);
   return (
     <div>
       <PageHeader />
-      <center>
+      {/* <center>
         <TableHeader></TableHeader>
         <TableBody chefData={props.chefData} />
-      </center>
-      {/* <div className="card-container">
+      </center> */}
+      <div className="card-container">
                   {props.chefData.map((chef, index) => (
                     <ChefCard key={index} chef={chef} />
                   ))}
-                </div> */}
+                </div>
     </div>
   );
 }
