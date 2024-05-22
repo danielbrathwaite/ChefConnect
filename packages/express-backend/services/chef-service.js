@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import chefModel from "../models/chef.js";
+import chefListModel from "../models/chefList.js";
 import menuItem from "../models/menuItem.js";
 import dotenv from "dotenv";
 
@@ -41,13 +42,28 @@ function deleteChefById(id) {
   return chefModel.findByIdAndDelete(id);
 }
 
-function findChefByName(name) {
-  return chefModel.find({ name: name });
-}
-
-function findChefByFirstOrLastName(name) {
-  return chefModel.find({ firstName: name });
-}
+// function searchChefByName(searchName) {
+//   const searchRegex = new RegExp(searchName, 'i');
+//   //if searching a full name
+//   const searchTerms = searchName.split(/\s+/);
+//   if (searchTerms.length > 1){
+//     return chefListModel.find({
+//       $or: [
+//         { firstName: { $regex: new RegExp(searchTerms[0], 'i') }, 
+//         lastName: { $regex: new RegExp(searchTerms[1], 'i') } }
+//       ]
+//     })
+//   }
+//   //if searching only one word
+//   else {
+//   return chefListModel.find({
+//     $or: [
+//         { firstName: { $regex: searchRegex } },
+//         { lastName: { $regex: searchRegex } }
+//     ]
+// });
+//   }
+// }
 
 function findChefByJob(job) {
   return chefModel.find({ job: job });
@@ -61,9 +77,8 @@ export default {
   addChef,
   getChefs,
   findChefById,
-  findChefByName,
   findChefByJob,
   findChefByNameAndJob,
-  findChefByFirstOrLastName,
-  deleteChefById,
+  deleteChefById
 };
+
