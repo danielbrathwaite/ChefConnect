@@ -32,41 +32,37 @@ app.get("/users", (req, res) => {
 });
 
 app.get("/search", async (req, res) => {
-  try{
-    const { firstName, lastName, cuisines } = req.query;
-    const query = {};
+  try {
+    // Extract query parameters from the request
+    const { name, cuisine, location, minPrice, maxPrice, minRating } = req.query;
 
-    if(firstName){
-      query.firstName = new RegExp(firstName, 'i');
+    // Construct the filter object based on the provided parameters
+    const filter = {};
+    if (name) {
+      filter.$or = [
+        { firstName: { $regex: new RegExp(name, 'i') } },
+        { lastName: { $regex: new RegExp(name, 'i') } }
+      ];
+    }
+    if (cuisine) filter.cuisines = { $regex: new RegExp(cuisine, 'i') };
+    if (location) filter.location = { $regex: new RegExp(location, 'i') };
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = parseInt(minPrice);
+      if (maxPrice) filter.price.$lte = parseInt(maxPrice);
+    }
+    if (minRating) {
+      filter['reviews.rating'] = { $gte: parseInt(minRating) };
     }
 
-    if(lastName){
-      query.lastName = new RegExp(lastName, 'i');
-    }
+    // Query the database with the constructed filter
+    const chefs = await Chef.find(filter).select('firstName lastName cuisines location price reviews');
 
-    if(cuisines){
-      query.cuisines = cuisines;
-    }
-
-    // if(minPrice && maxPrice){
-    //   query.price = {$gte: minPrice, $lte: maxPrice};
-    // }
-    // else if (minPrice){
-    //   query.price = {$gte: minPrice};
-    // }
-    // else if (maxPrice){
-    //   query.price = {$lte: maxPrice};
-    // }
-
-    // if(minRating){
-    //   query.rating = {$gte: minRating};
-    // }
-
-    const chef_results = await Chef.find(query);
-    res.json(chef_results);
-  }
-  catch(error){
-    res.status(500).send(error.message)
+    // Send the response with the filtered chefs
+    res.json(chefs);
+  } catch (error) {
+    console.error('Error searching for chefs:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 

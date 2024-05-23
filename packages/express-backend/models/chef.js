@@ -43,9 +43,9 @@ const ChefSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
+    location: {
       type: String,
-      required: false,
+      required: true,
     },
     phoneNumber: {
       type: String,
@@ -54,6 +54,10 @@ const ChefSchema = new mongoose.Schema(
     cuisines: {
       type: [String],
       required: false
+    },
+    price: {
+      type: Number,
+      required: true
     },
     reviews: {
       type: [ReviewSchema],
