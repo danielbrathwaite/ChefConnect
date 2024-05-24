@@ -59,6 +59,9 @@ const ChefSchema = new mongoose.Schema(
     reviews: {
         type: [ReviewSchema],
         required: false
+    },
+    profilePicture: {
+      type: String
     }
   },
   { collection: "chefs_list" }

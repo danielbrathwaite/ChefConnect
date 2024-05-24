@@ -31,41 +31,48 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
-app.post("/upload", upload.single("my_file"), async (req, res) => {
+app.post('/chefs', async (req, res) => {
   try {
-    const b64 = Buffer.from(req.file.buffer).toString("base64");
-    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-    const cldRes = await handleUpload(dataURI);
-    res.json(cldRes);
-  } catch (error) {
-    console.log(error);
-    res.send({
-      message: error.message,
+    const { firstName, lastName, address, phoneNumber, cuisine, image } = req.body;
+
+    // Upload image to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(image, {
+      folder: 'chefs',
+      use_filename: true,
+      unique_filename: false,
     });
+
+    const imageUrl = uploadResponse.secure_url;
+
+    // Save chef data in the database (example using a mock database function)
+    const newChef = {
+      firstName,
+      lastName,
+      address,
+      phoneNumber,
+      cuisine,
+      imageUrl
+    };
+
+    // Mock function to save chef to the database
+    chefService.addChef(newChef).then(() => {
+    })
+
+    res.status(201).json({ message: 'Chef created successfully', chef: newChef });
+  } catch (error) {
+    console.error('Error uploading image or saving data:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
-/////////////////////////
-// Uploads an image file
-/////////////////////////
-const uploadImage = async (imagePath) => {
 
-  // Use the uploaded file's name as the asset's public ID and 
-  // allow overwriting the asset with new versions
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-  };
+app.post("/chefs", (req, res) => {
+  const chef = req.body;
+  chefService.addChef(chef).then((savedChef) => {
+    if (savedChef) res.status(201).send(savedChef);
+    else res.status(500).end();
+  });
+});
 
-  try {
-    // Upload the image
-    const result = await cloudinary.uploader.upload(imagePath, options);
-    console.log(result);
-    return result.public_id;
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 // homepage stuff
 app.get("/", (req, res) => {
@@ -147,13 +154,6 @@ app.get("/chefs/:id", (req, res) => {
   });
 });
 
-app.post("/chefs", (req, res) => {
-  const chef = req.body;
-  chefService.addChef(chef).then((savedChef) => {
-    if (savedChef) res.status(201).send(savedChef);
-    else res.status(500).end();
-  });
-});
 
 app.get("/chefs", (req, res) => {
   const name = req.query.name;
