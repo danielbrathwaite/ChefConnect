@@ -86,14 +86,6 @@ function MyApp() {
     return promise;
   }
 
-  function fetchUsers() {
-    const promise = fetch(`${API_PREFIX}/users`, {
-      headers: addAuthHeader(),
-    });
-
-    return promise;
-  }
-
   function fetchChefs() {
     const promise = fetch(`${API_PREFIX}/chefs`, {
       headers: addAuthHeader(),

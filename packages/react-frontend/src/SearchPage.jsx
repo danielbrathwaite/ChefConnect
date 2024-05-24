@@ -9,7 +9,7 @@ function ChefCard({ chef }) {
       <p>Price: {chef.price}</p>
       <p>Cuisines: {chef.cuisines}</p>
       <p>Location: {chef.location}</p>
-      <p>Rating: {chef.rating}</p>
+      <p>Rating: {chef.rating}</p> 
       <button>Menu</button>
     </div>
   );
