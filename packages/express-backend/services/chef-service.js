@@ -43,7 +43,6 @@ function deleteChefById(id) {
   return chefModel.findByIdAndDelete(id);
 }
 
-
 // function searchChefByName(searchName) {
 //   const searchRegex = new RegExp(searchName, 'i');
 //   //if searching a full name
@@ -83,3 +82,4 @@ export default {
   findChefByNameAndJob,
   deleteChefById
 };
+

@@ -43,17 +43,21 @@ const ChefSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    address: {
+    location: {
       type: String,
-      required: false,
+      required: true,
     },
     phoneNumber: {
       type: String,
       required: false,
     },
-    specialties: {
+    cuisines: {
       type: [String],
-      required: false,
+      required: false
+    },
+    price: {
+      type: Number,
+      required: true
     },
     reviews: {
       type: [ReviewSchema],
