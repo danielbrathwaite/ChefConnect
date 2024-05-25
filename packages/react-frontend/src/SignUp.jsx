@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function SignUp(props) {
   const [creds, setCreds] = useState({
     username: "",
     pwd: "",
   });
+
+  const navigate = useNavigate();
+  const handleSignUp = () => navigate('/search');
 
   return (
     <div class="small-container">
@@ -51,6 +54,7 @@ function SignUp(props) {
   function submitForm() {
     props.handleSubmit(creds);
     setCreds({ username: "", pwd: "" });
+    handleSignUp();
   }
 }
 export default SignUp;
