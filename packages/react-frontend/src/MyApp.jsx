@@ -109,12 +109,9 @@ function MyApp() {
   return (
     <Router>
       <Routes>
-        <Route index element={<HomePage />} />
+        <Route index element={<HomePage />}/>
         <Route path="/login" element={<Login handleSubmit={loginUser} />} />
-        <Route
-          path="/signup"
-          element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />}
-        />
+        <Route path="/signup" element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />} />
         <Route path="/search" element={<SearchPage chefData={chefData} />} />
       </Routes>
     </Router>
