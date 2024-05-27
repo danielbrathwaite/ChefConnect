@@ -1,86 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 function ChefCard({ chef }) {
   return (
     <div className="card">
-      <h2>
-        {chef.firstName} {chef.lastName}
-      </h2>
+      <div className="card-header">
+        <h2>
+          {chef.firstName} {chef.lastName}
+        </h2>
+        <img src={chef.profilePicture} alt="No profile picture" className="profile-picture" />
+      </div>
       <p>Price: {chef.price}</p>
       <p>Cuisines: {chef.cuisines}</p>
       <p>Location: {chef.location}</p>
-      <p>Rating: {chef.rating}</p>
+      <p>Rating: {chef.rating}</p> 
       <button>Menu</button>
     </div>
   );
 }
 
-function PageHeader(props) {
+function PageHeader({handleSearch}) {
+  const [searchString, setSearchString] = useState("");
   return (
     <div className="container">
       <center>
         <h1> Chefs List</h1>
       </center>
-      <div className="input-box">
+      <form className="input-box" onSubmit={handleSearch}>
         <input
           type="search"
-          name="search-form"
-          id="search-form"
+          name="search-input"
+          id="search-input"
           className="search-input"
-          placeholder="Search for a Chef"
+          placeholder="Search by Cuisine"
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
         />
-      </div>
+        <button type="submit"> Search</button>
+      </form>
     </div>
   );
-}
-
-function TableHeader() {
-  return (
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Price</th>
-        <th>Cuisines</th>
-        <th>Location</th>
-        <th>Rating</th>
-      </tr>
-    </thead>
-  );
-}
-
-function TableBody(props) {
-  const rows = props.chefData.map((row, index) => {
-    return (
-      <tr key={index}>
-        <td>{row.firstName}</td>
-        <td>{row.lastName}</td>
-        <td>{row.price}</td>
-        <td>{row.cuisines}</td>
-        <td>{row.location}</td>
-        <td>{row.rating}</td>
-        <td>
-          <button>Menu</button>
-        </td>
-      </tr>
-    );
-  });
-  return <tbody>{rows}</tbody>;
 }
 
 function SearchPage(props) {
   return (
     <div>
-      <PageHeader />
-      <center>
-        <TableHeader></TableHeader>
-        <TableBody chefData={props.chefData} />
-      </center>
-      {/* <div className="card-container">
+      <PageHeader handleSearch={props.handleSearch}/>
+      <div className="card-container">
                   {props.chefData.map((chef, index) => (
                     <ChefCard key={index} chef={chef} />
                   ))}
-                </div> */}
+                </div>
     </div>
   );
 }

@@ -98,9 +98,9 @@ app.put('/chefs/:id', async (req, res) => {
     profilePicture = uploadResponse.secure_url;
   }
   else{
-    profilePicture = '';
+    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
   }
-  if (profilePicture != '')
+  if (profilePicture != 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp')
     {
       profilePicture = cloudinary.url(profilePicture, {
         width: 200,
@@ -148,12 +148,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/users", (req, res) => {
-  userService
-    .getUsers()
-    .then((result) => {
-      res.send({ users_list: result });
-    })
-    .catch((error) => {
+  userService.getUsers()
+  .then ((result) => {
+    res.send({users_list: result})})
+  .catch(error => {
       console.error("Error fetching users:", error);
       res.status(500).send("Internal Server Error");
     });
@@ -195,32 +193,33 @@ app.get("/search", async (req, res) => {
 });
 
 app.get("/users/:id", (req, res) => {
-  const id = req.params["userId"];
-  userService.findUserById(id).then((result) => {
-    if (result === undefined || result === null)
-      res.status(404).send("Resource not found.");
-    else res.send({ users_list: result });
-  });
+    const id = req.params["userId"];
+    userService.findUserById(id).then((result) => {
+      if (result === undefined || result === null)
+        res.status(404).send("Resource not found.");
+      else res.send({ users_list: result });
+    });
 });
-
+  
 app.post("/users", authenticateUser, (req, res) => {
-  const user = req.body;
-  userService.addUser(user).then((savedUser) => {
-    if (savedUser) res.status(201).send(savedUser);
-    else res.status(500).end();
-  });
+    const user = req.body;
+    userService.addUser(user).then((savedUser) => {
+      if (savedUser) res.status(201).send(savedUser);
+      else res.status(500).end();
+    });
 });
-
+  
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
-  if (id === undefined) {
-    res.status(404).send("Resource not found");
+  if (id === undefined)
+  {
+    res.status(404).send("Resource not found")
   } else {
     userService.deleteUserById(id).then(() => {
-      res.status(204).send("Successful delete");
-    });
-  }
-});
+    res.status(204).send("Successful delete");}
+    )
+  ;
+}});
 
 app.get("/chefs/:id", (req, res) => {
   const id = req.params["id"];
@@ -229,17 +228,16 @@ app.get("/chefs/:id", (req, res) => {
       res.status(404).send("Resource not found.");
     else {
       //for loop for calculating average rating
-      let averageRating = 0;
-      if (chef.reviews.length > 0) {
-        let totalRating = 0;
-        for (let i = 0; i < chef.reviews.length; i++) {
+    let averageRating = 0;
+    if (chef.reviews.length > 0) {
+      let totalRating = 0;
+      for (let i = 0; i < chef.reviews.length; i++) {
           totalRating += chef.reviews[i].rating;
-        }
-        averageRating = totalRating / chef.reviews.length;
       }
-
-      res.send({ chefs_list: chef, averageRating: averageRating.toFixed(2) });
+        averageRating = totalRating / chef.reviews.length;
     }
+    
+    res.send({ chefs_list: chef, averageRating: averageRating.toFixed(2) });}
   });
 });
 
@@ -248,31 +246,35 @@ app.get("/chefs", (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
   chefService
-    .getChefs(name, job)
-    .then((result) => {
-      res.send({ chefs_list: result });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send("An error ocurred in the server.");
-    });
+  .getChefs(name, job)
+  .then((result) => {
+    res.send({ chefs_list: result });
+  })
+  .catch((error) => {
+    console.log(error);
+    res.status(500).send("An error ocurred in the server.");
+  });
 });
 
 app.delete("/chefs/:id", (req, res) => {
-  const id = req.params["id"];
-  if (id === undefined) {
-    res.status(404).send("Resource not found");
-  } else {
-    chefService.deleteChefById(id).then(() => {
-      res.status(204).send("Successful delete");
-    });
-  }
-});
+const id = req.params["id"];
+if (id === undefined)
+{
+  res.status(404).send("Resource not found")
+} else {
+  chefService.deleteChefById(id).then(() => {
+  res.status(204).send("Successful delete");}
+  )
+;
+}});
 
 app.post("/signup", registerUser);
 
 app.post("/login", loginUser);
 
+
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(
+    `Example app listening at http://localhost:${port}`
+  );
 });

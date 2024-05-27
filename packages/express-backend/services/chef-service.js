@@ -4,7 +4,7 @@ import chefListModel from "../models/chefList.js";
 import menuItem from "../models/menuItem.js";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config()
 mongoose.set("debug", true);
 
 mongoose
@@ -22,9 +22,10 @@ function getChefs(name, job) {
     promise = findUserByName(name);
   } else if (job && !name) {
     promise = findUserByJob(job);
-  } else if (name && job) {
-    promise = findChefByNameAndJob(name, job);
   }
+    else if(name && job){
+    promise = findChefByNameAndJob(name, job);
+    }
   return promise;
 }
 
@@ -69,8 +70,8 @@ function findChefByJob(job) {
   return chefModel.find({ job: job });
 }
 
-function findChefByNameAndJob(name, job) {
-  return chefModel.find({ name: name, job: job });
+function findChefByNameAndJob(name, job){
+    return chefModel.find({name: name, job: job});
 }
 
 export default {

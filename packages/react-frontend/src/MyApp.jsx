@@ -6,17 +6,23 @@ import Layout from './Layout';
 import ProfileDone from './ProfileDone';
 import Login from './Login';
 import { useNavigate } from "react-router-dom";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link
-} from "react-router-dom";
-import SignUp from './SignUp';
-
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SignUp from "./SignUp";
+import SearchPage from "./SearchPage";
 
 
 function MyApp() {
+  const [chefData, setChefData] = useState([
+    {
+      firstName: "Chef",
+      lastName: "Bob", // the rest of the data
+      price: "$",
+      cuisines: "Italian",
+      location: "New York",
+      rating: "5",
+      profilePicture: "j@gmail.com",
+    }
+  ]);
   const [chefProfiles, setChefProfiles] = useState([]);
   const updateList = (newChefProfile) => {
     setChefProfiles([...chefProfiles, newChefProfile]);
@@ -25,23 +31,24 @@ function MyApp() {
   const INVALID_TOKEN = "INVALID_TOKEN";
   const [token, setToken] = useState(INVALID_TOKEN);
   const [message, setMessage] = useState("");
+
   const API_PREFIX = "http://localhost:8000";
+  
 
   useEffect(() => {
-    fetchUsers()
-    .then((res) =>
-      res.status === 200 ? res.json() : undefined
-    )
-    .then((json) => {
-      if (json) {
-        setChefProfiles(json["users_list"]);
-      } else {
-        setChefProfiles(null);
-      }
-    })
-      .catch((error) => { console.log(error); });
-  }, [] );
-
+    fetchChefs()
+      .then((res) => (res.status === 200 ? res.json() : undefined))
+      .then((json) => {
+        if (json) {
+          setChefData(json["chefs_list"]);
+        } else {
+          setChefData(null);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   function loginUser(creds) {
     const promise = fetch(`${API_PREFIX}/login`, {
@@ -57,16 +64,16 @@ function MyApp() {
             .json()
             .then((payload) => setToken(payload.token));
           setMessage(`Login successful; auth token saved`);
+          return response;
         } else {
-          setMessage(
-            `Login Error ${response.status}: ${response.data}`
-          );
+          setMessage(`Login Error ${response.status}: ${response.data}`);
+          return response;
         }
       })
       .catch((error) => {
         setMessage(`Login Error: ${error}`);
       });
-  
+    
     return promise;
   }
   
@@ -84,11 +91,12 @@ function MyApp() {
             .json()
             .then((payload) => setToken(payload.token));
           setMessage(
-            `Signup successful for user: ${creds.username}; auth token saved`);
-        } else {
-          setMessage(
-            `Signup Error ${response.status}: ${response.data}`
+            `Signup successful for user: ${creds.username}; auth token saved`,
           );
+          return response;
+        } else {
+          setMessage(`Signup Error ${response.status}: ${response.data}`);
+          return response;
         }
       })
       .catch((error) => {
@@ -98,13 +106,32 @@ function MyApp() {
     return promise;
   }
 
-  function fetchUsers() {
-    const promise = fetch(`${API_PREFIX}/users`, {
-      headers: addAuthHeader()
+  function fetchChefs() {
+    const promise = fetch(`${API_PREFIX}/chefs`, {
+      headers: addAuthHeader(),
     });
-  
+
     return promise;
   }
+  function handleSearch(event){
+    event.preventDefault();
+    const searchCuisine = event.target.elements['search-input'].value;
+    console.log(searchCuisine);
+    fetch(`${API_PREFIX}/search?cuisine=${searchCuisine}`)
+    .then((response) => {
+      if(response.status === 200){
+        return response.json()
+      }
+    })
+    .then((data) => {
+      console.log(data);
+      setChefData(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching search results:', error);
+    });
+  }
+
 
 function addAuthHeader(otherHeaders = {}) {
   if (token === INVALID_TOKEN) {
@@ -120,12 +147,10 @@ function addAuthHeader(otherHeaders = {}) {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="/profile"  element={<ChefProfile handleSubmit={updateList}/>} />
-          <Route path="/login"element={<Login handleSubmit={loginUser} />} />
-          <Route path="/signup"element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />}/>
-        </Route>
+        <Route index element={<HomePage />}/>
+        <Route path="/login" element={<Login handleSubmit={loginUser} />} />
+        <Route path="/signup" element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />} />
+        <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
       </Routes>
     </Router>
   );
