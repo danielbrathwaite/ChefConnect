@@ -29,6 +29,7 @@ function PageHeader({handleSearch}) {
   const [searchString, setSearchString] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [minRating, setMinRating] = useState("");
   return (
     <div className="container">
       <center>
@@ -55,6 +56,15 @@ function PageHeader({handleSearch}) {
           onChange={(e) => setMaxPrice(e.target.value)}
           />
         </div>
+
+        {/* <div>
+          <label>
+          <input type="checkbox" id="rating-filter" name="rating-filter" 
+            checked={minRating} 
+            onClick={(e) => setMinRating(e.target.checked)}/>
+            4 stars and up
+          </label>
+        </div> */}
         <button type="submit"> Search</button>
       </form>
     </div>
