@@ -52,9 +52,15 @@ function SignUp(props) {
   }
 
   function submitForm() {
-    props.handleSubmit(creds);
+    props.handleSubmit(creds)
+      .then((response) => {
+        if (response.status === 201) {
+          handleSignUp();
+        } else {
+          console.log("This is working");
+        }
+      });
     setCreds({ username: "", pwd: "" });
-    handleSignUp();
   }
 }
 export default SignUp;

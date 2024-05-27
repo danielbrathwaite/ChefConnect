@@ -53,9 +53,15 @@ function Login(props) {
   }
 
   function submitForm() {
-    props.handleSubmit(creds);
+    props.handleSubmit(creds)
+      .then((response) => {
+        if (response.status === 200) {
+          handleSignUp();
+        } else {
+          console.log("This is working");
+        }
+      });
     setCreds({ username: "", pwd: "" });
-    handleLogin();
   }
 }
 export default Login;
