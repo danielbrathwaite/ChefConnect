@@ -27,6 +27,8 @@ function ChefCard({ chef }) {
 
 function PageHeader({handleSearch}) {
   const [searchString, setSearchString] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   return (
     <div className="container">
       <center>
@@ -42,6 +44,17 @@ function PageHeader({handleSearch}) {
           value={searchString}
           onChange={(e) => setSearchString(e.target.value)}
         />
+        <div className="price-filter">
+          <input 
+          type="number" id="min-price" placeholder="Min Price" 
+          value={minPrice} 
+          onChange={(e) => setMinPrice(e.target.value)}
+          />
+          <input type="number" id="max-price" placeholder="Max Price" 
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+          />
+        </div>
         <button type="submit"> Search</button>
       </form>
     </div>

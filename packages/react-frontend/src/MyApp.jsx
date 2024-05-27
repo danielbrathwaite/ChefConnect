@@ -104,8 +104,9 @@ function MyApp() {
   function handleSearch(event){
     event.preventDefault();
     const searchCuisine = event.target.elements['search-input'].value;
-    console.log(searchCuisine);
-    fetch(`${API_PREFIX}/search?cuisine=${searchCuisine}`)
+    const minPrice = event.target.elements['min-price'].value;
+    const maxPrice = event.target.elements['max-price'].value;
+    fetch(`${API_PREFIX}/search?cuisine=${searchCuisine}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
     .then((response) => {
       if(response.status === 200){
         return response.json()

@@ -568,6 +568,14 @@ dd {
   margin-bottom: 0.5rem;
 }
 
+.price-filter{
+  display:flex;
+}
+
+.price-filter input{
+  margin-right: 10px;
+}
+
 .full-container {
   max-width: 100%;
   padding: 0 1rem;
