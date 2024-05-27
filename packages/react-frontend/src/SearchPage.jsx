@@ -13,9 +13,12 @@ function ChefCard({ chef }) {
 
   return (
     <div className="card">
-      <h2>
-        {chef.firstName} {chef.lastName}
-      </h2>
+      <div className="card-header">
+        <h2>
+          {chef.firstName} {chef.lastName}
+        </h2>
+        <img src={chef.profilePicture} className="chef-image"/>
+      </div>
       <p>Price: {chef.price}</p>
       <p>Cuisines: {chef.cuisines.join(', ')}</p>
       <p>Location: {chef.location}</p>
@@ -29,7 +32,7 @@ function PageHeader({handleSearch}) {
   const [searchString, setSearchString] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [minRating, setMinRating] = useState("");
+  const [minRating, setMinRating] = useState(false);
   return (
     <div className="container">
       <center>
@@ -56,7 +59,7 @@ function PageHeader({handleSearch}) {
           onChange={(e) => setMaxPrice(e.target.value)}
           />
         </div>
-
+        <button type="submit"> Search</button>
         {/* <div>
           <label>
           <input type="checkbox" id="rating-filter" name="rating-filter" 
@@ -65,7 +68,6 @@ function PageHeader({handleSearch}) {
             4 stars and up
           </label>
         </div> */}
-        <button type="submit"> Search</button>
       </form>
     </div>
   );
