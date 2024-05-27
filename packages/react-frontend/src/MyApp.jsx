@@ -13,6 +13,7 @@ import SearchPage from "./SearchPage";
 
 function MyApp() {
   const [chefData, setChefData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [chefProfiles, setChefProfiles] = useState([]);
   const updateList = (newChefProfile) => {
     setChefProfiles([...chefProfiles, newChefProfile]);
@@ -100,6 +101,25 @@ function MyApp() {
     return promise;
   }
 
+  function handleSearch(event){
+    event.preventDefault();
+    const searchCuisine = event.target.elements['search-input'].value;
+    console.log(searchCuisine);
+    fetch(`${API_PREFIX}/search?cuisine=${searchCuisine}`)
+    .then((response) => {
+      if(response.status === 200){
+        return response.json()
+      }
+    })
+    .then((data) => {
+      console.log(data);
+      setChefData(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching search results:', error);
+    });
+  }
+
 
   function addAuthHeader(otherHeaders = {}) {
     if (token === INVALID_TOKEN) {
@@ -118,7 +138,7 @@ function MyApp() {
         <Route index element={<HomePage />}/>
         <Route path="/login" element={<Login handleSubmit={loginUser} />} />
         <Route path="/signup" element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />} />
-        <Route path="/search" element={<SearchPage chefData={chefData} />} />
+        <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
       </Routes>
     </Router>
   );
