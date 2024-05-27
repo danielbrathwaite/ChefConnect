@@ -6,9 +6,10 @@ import Layout from "./Layout";
 import ProfileDone from "./ProfileDone";
 import Login from "./Login";
 import { useNavigate } from "react-router-dom";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
+
 
 function MyApp() {
   const [chefData, setChefData] = useState([]);
@@ -22,6 +23,7 @@ function MyApp() {
   const [message, setMessage] = useState("");
 
   const API_PREFIX = "http://localhost:8000";
+  
 
   useEffect(() => {
     fetchChefs()
@@ -50,14 +52,16 @@ function MyApp() {
         if (response.status === 200) {
           response.json().then((payload) => setToken(payload.token));
           setMessage(`Login successful; auth token saved`);
+          return response;
         } else {
           setMessage(`Login Error ${response.status}: ${response.data}`);
+          return response;
         }
       })
       .catch((error) => {
         setMessage(`Login Error: ${error}`);
       });
-
+    
     return promise;
   }
 
@@ -75,8 +79,10 @@ function MyApp() {
           setMessage(
             `Signup successful for user: ${creds.username}; auth token saved`,
           );
+          return response;
         } else {
           setMessage(`Signup Error ${response.status}: ${response.data}`);
+          return response;
         }
       })
       .catch((error) => {

@@ -9,7 +9,7 @@ function Login(props) {
   });
 
   const navigate = useNavigate();
-  const handleLogin = () => navigate('/search');
+  const loginReroute = () => navigate('/search');
 
   return (
     <div class="small-container">
@@ -56,9 +56,9 @@ function Login(props) {
     props.handleSubmit(creds)
       .then((response) => {
         if (response.status === 200) {
-          handleSignUp();
+          loginReroute();
         } else {
-          console.log("This is working");
+          // Handle bad login
         }
       });
     setCreds({ username: "", pwd: "" });
