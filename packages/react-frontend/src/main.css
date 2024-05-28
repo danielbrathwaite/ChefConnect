@@ -1189,7 +1189,7 @@ caption {
 
 .chef-image{
   width: 80px;
-  height:auto;
+  height: 80px;
   object-fit: cover;
   border-radius: 50%;
   margin-bottom: 16px;

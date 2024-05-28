@@ -8,3 +8,8 @@ function MenuItem(props) {
     description: "",
   });
 }
+
+function MenuPage(props)
+{
+  
+}
