@@ -15,6 +15,100 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
+// gets the inputted form, stores base64 image in cloudinary and converts it 
+// to a url, stores that url in the database  
+app.post('/chefs', async (req, res) => {
+  try {
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, image, foodGallery} = req.body;
+    console.log("sent in json", req.body)
+    //console.log("image", image)
+    // Upload image to Cloudinary
+    let profilePicture;
+    if (image != null){
+    const uploadResponse = await cloudinary.uploader.upload(image, {
+      folder: 'chefs',
+      use_filename: true,
+      unique_filename: false,
+    });
+
+    profilePicture = uploadResponse.secure_url;
+  }
+  else{
+    profilePicture = 'noimage';
+  }
+    const newChef = {
+      email,
+      password,
+      firstName,
+      lastName,
+      location,
+      phoneNumber,
+      cuisines,
+      price,
+      reviews,
+      profilePicture,
+      foodGallery
+    };
+    console.log("cheef", newChef)
+    await chefService.addChef(newChef);
+
+    res.status(201).json({ message: 'Chef created successfully', chef: newChef });
+  } catch (error) {
+    console.error('Error uploading image or saving data:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//IN PROGRESS, updates the chef profile
+app.put('/chefs/:id', async (req, res) => {
+  try {
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, image } = req.body;
+  
+    // Upload image to Cloudinary
+    let profilePicture;
+    if (image != null){
+    const uploadResponse = await cloudinary.uploader.upload(image, {
+      folder: 'chefs',
+      use_filename: true,
+      unique_filename: false,
+    });
+
+    profilePicture = uploadResponse.secure_url;
+  }
+  else{
+    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
+  }
+  if (profilePicture != 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp')
+    {
+      profilePicture = cloudinary.url(profilePicture, {
+        width: 200,
+        height: 200,
+        crop: 'fill'
+      });
+      
+    } 
+    const newChef = {
+      email,
+      password,
+      firstName,
+      lastName,
+      location,
+      phoneNumber,
+      cuisines,
+      price,
+      profilePicture
+    };
+    console.log("cheef", newChef)
+    await chefService.addChef(newChef);
+
+    res.status(201).json({ message: 'Chef created successfully', chef: newChef });
+  } catch (error) {
+    console.error('Error uploading image or saving data:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 // homepage stuff
 app.get("/", (req, res) => {
   res.send("Welcome to ChefConnect!");
