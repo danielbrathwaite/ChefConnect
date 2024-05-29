@@ -3,15 +3,30 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // code for file upload is borrowed from pluralsight.com
-function FileUploader({ onFileSelect }) {
-  const handleFileInput = (event) => {
-    onFileSelect(event.target.files[0]);
+function FileUploader({onFileSelect})
+{
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
-  return (
-    <div>
-      <input type="file" onChange={handleFileInput} />
-    </div>
-  );
+
+    const handleFileInput = (event) => {
+      const file = event.target.files[0];
+      convertToBase64(file).then(base64 => {
+        console.log(base64); 
+        onFileSelect(base64)
+      });
+        
+    }
+    return (
+        <div>
+          <input type="file" onChange={handleFileInput} />
+        </div>
+      );
 }
 
 function ChefProfile(props) {
