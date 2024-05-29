@@ -1,7 +1,7 @@
 // src/Form.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useLocation , Link } from "react-router-dom";
 
 // code for file upload is borrowed from pluralsight.com
 function FileUploader({ onFileSelect }) {
@@ -76,6 +76,7 @@ function ChefProfile(props) {
 
   return (
     <div className="container">
+      <Link to="/">Home</Link>
       <h1> Create a Profile</h1>
       <form>
         <label htmlFor="firstName">First Name:</label>
