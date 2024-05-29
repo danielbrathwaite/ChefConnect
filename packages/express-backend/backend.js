@@ -6,6 +6,7 @@ import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
 import chefList from "./models/chefList.js";
 import Chef from "./models/chef.js";
+import {v2 as cloudinary} from 'cloudinary';
 
 
 const app = express();

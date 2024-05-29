@@ -8,10 +8,10 @@ function SignUp(props) {
   });
 
   const navigate = useNavigate();
-  const signupReroute = () => navigate('/search');
+  const signupReroute = (creds) => navigate('/profile', { state: { username: creds.username, password: creds.pwd } });
 
   return (
-    <div class="small-container">
+    <div className="small-container">
       <Link to="/">Home</Link>
       <form>
         <label htmlFor="username">UserName (email) </label>
@@ -55,7 +55,7 @@ function SignUp(props) {
     props.handleSubmit(creds)
       .then((response) => {
         if (response.status === 201) {
-          signupReroute();
+          signupReroute(creds);
         } else {
           // Handle bad login
         }

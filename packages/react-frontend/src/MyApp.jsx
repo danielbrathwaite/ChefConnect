@@ -93,6 +93,28 @@ function MyApp() {
     return promise;
   }
 
+  function addChefProfile(chefProfile)
+  {
+    const promise = fetch(`${API_PREFIX}/chefs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(chefProfile),
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        return response;
+      } else {
+        return response;
+      }
+    })
+    .catch((error) => {
+      setMessage(`Profile Error: ${error}`);
+    });
+    return promise;
+  }
+
   function fetchChefs() {
     const promise = fetch(`${API_PREFIX}/chefs`, {
       headers: addAuthHeader(),
@@ -140,6 +162,7 @@ function MyApp() {
         <Route path="/login" element={<Login handleSubmit={loginUser} />} />
         <Route path="/signup" element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />} />
         <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
+        <Route path="/profile" element={<ChefProfile handleSubmit={addChefProfile}/>} />
       </Routes>
     </Router>
   );
