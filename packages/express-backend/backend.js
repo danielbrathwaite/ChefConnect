@@ -56,7 +56,6 @@ app.post('/chefs', async (req, res) => {
   else{
     profilePicture = 'noimage';
   }
-    // Save chef data in the database (example using a mock database function)
     const newChef = {
       email,
       password,
@@ -71,7 +70,6 @@ app.post('/chefs', async (req, res) => {
       foodGallery
     };
     console.log("cheef", newChef)
-    // Mock function to save chef to the database
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
@@ -81,12 +79,11 @@ app.post('/chefs', async (req, res) => {
   }
 });
 
-//in progress, updates the chef profile
+//IN PROGRESS, updates the chef profile
 app.put('/chefs/:id', async (req, res) => {
   try {
     const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, image } = req.body;
-    //console.log("sent in json", req.body)
-    //console.log("image", image)
+  
     // Upload image to Cloudinary
     let profilePicture;
     if (image != null){
@@ -110,7 +107,6 @@ app.put('/chefs/:id', async (req, res) => {
       });
       
     } 
-    // Save chef data in the database (example using a mock database function)
     const newChef = {
       email,
       password,
@@ -123,7 +119,6 @@ app.put('/chefs/:id', async (req, res) => {
       profilePicture
     };
     console.log("cheef", newChef)
-    // Mock function to save chef to the database
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
@@ -133,15 +128,6 @@ app.put('/chefs/:id', async (req, res) => {
   }
 });
 
-/*
-app.post("/chefs", (req, res) => {
-  const chef = req.body;
-  chefService.addChef(chef).then((savedChef) => {
-    if (savedChef) res.status(201).send(savedChef);
-    else res.status(500).end();
-  });
-});
-*/
 
 // homepage stuff
 app.get("/", (req, res) => {
