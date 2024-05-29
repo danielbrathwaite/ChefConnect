@@ -6,7 +6,7 @@ import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
 import chefList from "./models/chefList.js";
 import Chef from "./models/chef.js";
-import {v2 as cloudinary} from 'cloudinary';
+import menuItem from "./models/menuItem.js";
 
 
 const app = express();
@@ -156,6 +156,22 @@ app.get("/search", async (req, res) => {
   } catch (error) {
     console.error('Error searching for chefs:', error);
     res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.get("/chefs/:chefId/menu", async (req, res) => {
+  try {
+    const chefId = req.params.chefId;
+    // Find menu items by chefId and populate the 'chef' field with the chef's firstName and lastName
+    const menuItems = await menuItem.find({ chef: chefId });
+
+    if (!menuItems || menuItems.length === 0) {
+      return res.status(404).json({ message: "Chef or menu items not found" });
+    }
+
+    res.status(200).json(menuItems);
+  } catch (error) {
+    res.status(500).json({ message: `An error occurred: ${error.message}` });
   }
 });
 
