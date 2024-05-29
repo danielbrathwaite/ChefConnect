@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from "react";
 
 function ChefCard({ chef }) {
+
+  function getAverageRating(reviews) {
+    if(!reviews || reviews.length === 0){
+        return "No ratings";
+      }
+    const total = reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
+    const avgRating = total / reviews.length;
+    return avgRating;
+  }
+
   return (
     <div className="card">
       <div className="card-header">
         <h2>
           {chef.firstName} {chef.lastName}
         </h2>
-        <img src={chef.profilePicture} alt="No profile picture" className="profile-picture" />
+
+        <img src={chef.profilePicture} className="chef-image"/>
       </div>
       <p>Price: {chef.price}</p>
-      <p>Cuisines: {chef.cuisines}</p>
+      <p>Cuisines: {chef.cuisines.join(', ')}</p>
       <p>Location: {chef.location}</p>
-      <p>Rating: {chef.rating}</p> 
+      <p> Average Rating: {getAverageRating(chef.reviews)}</p> 
       <button>Menu</button>
     </div>
   );
@@ -20,12 +31,15 @@ function ChefCard({ chef }) {
 
 function PageHeader({handleSearch}) {
   const [searchString, setSearchString] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [minRating, setMinRating] = useState(false);
   return (
     <div className="container">
       <center>
         <h1> Chefs List</h1>
       </center>
-      <form className="input-box" onSubmit={handleSearch}>
+      <form className="small-container" onSubmit={handleSearch}>
         <input
           type="search"
           name="search-input"
@@ -35,7 +49,26 @@ function PageHeader({handleSearch}) {
           value={searchString}
           onChange={(e) => setSearchString(e.target.value)}
         />
+        <div className="price-filter">
+          <input 
+          type="number" id="min-price" placeholder="Min Price" 
+          value={minPrice} 
+          onChange={(e) => setMinPrice(e.target.value)}
+          />
+          <input type="number" id="max-price" placeholder="Max Price" 
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+          />
+        </div>
         <button type="submit"> Search</button>
+        {/* <div>
+          <label>
+          <input type="checkbox" id="rating-filter" name="rating-filter" 
+            checked={minRating} 
+            onClick={(e) => setMinRating(e.target.checked)}/>
+            4 stars and up
+          </label>
+        </div> */}
       </form>
     </div>
   );

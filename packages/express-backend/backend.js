@@ -7,6 +7,7 @@ import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
 import chefList from "./models/chefList.js";
 import Chef from "./models/chef.js";
+import {v2 as cloudinary} from 'cloudinary';
 
 import {v2 as cloudinary} from 'cloudinary';
           
@@ -182,7 +183,7 @@ app.get("/search", async (req, res) => {
     }
 
     // Query the database with the constructed filter
-    const chefs = await Chef.find(filter).select('firstName lastName cuisines location price reviews');
+    const chefs = await Chef.find(filter).sort({ firstName: 1, lastName: 1 }).select('firstName lastName cuisines location price reviews profilePicture');
 
     // Send the response with the filtered chefs
     res.json(chefs);

@@ -1,6 +1,7 @@
 // src/Form.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation , Link } from "react-router-dom";
 
 // code for file upload is borrowed from pluralsight.com
 function FileUploader({onFileSelect})
@@ -30,16 +31,29 @@ function FileUploader({onFileSelect})
 }
 
 function ChefProfile(props) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [submitted, setSubmitted] = useState(false);
   const [profile, setProfile] = useState({
     chefId: "",
+    username: "",
+    password: "",
     firstName: "",
     lastName: "",
-    address: "",
+    location: "",
     phoneNumber: "",
-    cuisine: "",
-    menu: "",
+    cuisines: "",
+    price: "",
     profilePic: null,
   });
+
+  useEffect(() => {
+    if(submitted)
+      {
+        navigate('/search');
+      }
+  },[submitted, navigate]);
+
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -50,22 +64,35 @@ function ChefProfile(props) {
   }
 
   function submitProfile() {
-    props.handleSubmit(profile);
-    console.log(profile);
+    const email = location.state.username;
+    const password = location.state.password;
+    const updatedProfile = {...profile,  email, password};
+    props.handleSubmit(updatedProfile)
+    .then((response) => {
+      if (response.status === 201) {
+        setSubmitted(true);
+      } else {
+        // Handle bad login
+      }
+    });
     setProfile({
       chefId: "",
+      username: "",
+      password: "",
       firstName: "",
       lastName: "",
-      address: "",
+      location: "",
       phoneNumber: "",
-      cuisine: "",
-      menu: "",
+      cuisines: "",
+      price: "",
       profilePic: null,
     });
   }
 
   return (
-    <div>
+    <div className="container">
+      <Link to="/">Home</Link>
+      <h1> Create a Profile</h1>
       <form>
         <label htmlFor="firstName">First Name:</label>
         <input
@@ -83,12 +110,12 @@ function ChefProfile(props) {
           value={profile.lastName}
           onChange={handleChange}
         />
-        <label htmlFor="address">Address:</label>
+        <label htmlFor="location">Location:</label>
         <input
           type="text"
-          name="address"
-          id="address"
-          value={profile.address}
+          name="location"
+          id="location"
+          value={profile.location}
           onChange={handleChange}
         />
         <label htmlFor="phoneNumber">Phone Number:</label>
@@ -99,40 +126,27 @@ function ChefProfile(props) {
           value={profile.phoneNumber}
           onChange={handleChange}
         />
-        <label htmlFor="cuisine">Cuisine(s):</label>
-        <select
-          name="cuisine"
-          id="cuisine"
-          value="ChefProfile.cuisine"
-          onChange={handleChange}
-        >
-          <option value="italian">Italian</option>
-          <option value="indian">Indian</option>
-          <option value="thai">Thai</option>
-          <option value="greek">Greek</option>
-        </select>
-        {/* <input
-            type="text"
-            name="cuisine"
-            id="cuisine"
-            value={profile.cuisine}
-            onChange={handleChange}
-          /> */}
-        <label htmlFor="menu">Menu:</label>
+        <label htmlFor="cuisines">Cuisine(s):</label>
         <input
-          type="text"
-          name="menu"
-          id="menu"
-          value={profile.menu}
-          onChange={handleChange}
-        />
+            type="text"
+            name="cuisines"
+            id="cuisines"
+            value={profile.cuisines}
+            onChange={handleChange}
+          />
+      <label htmlFor="price">Price:</label>
+        <input
+            type="text"
+            name="price"
+            id="price"
+            value={profile.price}
+            onChange={handleChange}
+          />
         <label htmlFor="profilePic">Profile Picture:</label>
         <FileUploader
           onFileSelect={(file) => setProfile({ ...profile, profilePic: file })}
         />
-        {location.pathname === "/profile" && (
           <input type="button" value="Submit" onClick={submitProfile} />
-        )}
       </form>
     </div>
   );

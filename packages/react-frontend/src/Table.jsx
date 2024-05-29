@@ -3,11 +3,11 @@ import React from "react";
 function TableHeader() {
   return (
     <thead>
-      <tr>
+      <tr>s
         <th>Name</th>
-        <th>Job</th>
-        <th>ID</th>
-        <th>Remove</th>
+        <th> Availability </th>
+        <th> Price</th>
+        <th> Cuisine</th>
       </tr>
     </thead>
   );
@@ -18,10 +18,10 @@ function TableBody(props) {
     return (
       <tr key={index}>
         <td>{row.name}</td>
-        <td>{row.job}</td>
-        <td>{row._id}</td>
+        <td>{row.availability}</td>
+        <td>{row.cuisine}</td>
         <td>
-          <button onClick={() => props.removeCharacter(index)}>Delete</button>
+          <button>Add to cart</button>
         </td>
       </tr>
     );
@@ -34,8 +34,7 @@ function Table(props) {
     <table>
       <TableHeader />
       <TableBody
-        characterData={props.characterData}
-        removeCharacter={props.removeCharacter}
+        characterData={props.menuData}
       />
     </table>
   );
