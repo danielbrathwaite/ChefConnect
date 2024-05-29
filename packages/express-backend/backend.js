@@ -132,6 +132,24 @@ app.put('/chefs/:id', async (req, res) => {
   }
 });
 
+//sends image gallery of requested chef
+app.get('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    chefService.findChefById(id).then((chef) => {
+    if (chef === undefined || chef === null)
+      res.status(404).send("Resource not found.");
+    else {
+    //send gallery straight up
+    res.json({message: "Gallery retrieved successfully.", foodGallery: chef.foodGallery})
+  }
+    
+  })}  catch (error) {
+    console.error('Error getting images:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 /*
 app.post("/chefs", (req, res) => {
   const chef = req.body;
