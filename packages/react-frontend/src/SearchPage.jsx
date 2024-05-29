@@ -13,14 +13,12 @@ function ChefCard({ chef }) {
 
   return (
     <div className="card">
-      <div className="card-header">
-        <h2>
-          {chef.firstName} {chef.lastName}
-        </h2>
-        <img src={chef.profilePicture} className="chef-image"/>
-      </div>
+      <h2>
+        {chef.firstName} {chef.lastName}
+      </h2>
+      <img src={chef.profilePicture} className="chef-image"/>
       <p>Price: {chef.price}</p>
-      <p>Cuisines: {chef.cuisines.join(', ')}</p>
+      <p>Cuisines: {chef.cuisines}</p>
       <p>Location: {chef.location}</p>
       <p> Average Rating: {getAverageRating(chef.reviews)}</p> 
       <button>Menu</button>

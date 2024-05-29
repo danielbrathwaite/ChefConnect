@@ -29,7 +29,7 @@ function MenuPage(props)
   return (
     <div>
       <MenuPageHeader/>
-      <Table menuData={menuData}/>
+      {/* <Table menuData={menuData}/> */}
     </div>
   );
 }
