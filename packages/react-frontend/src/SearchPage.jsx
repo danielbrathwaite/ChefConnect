@@ -17,6 +17,7 @@ function ChefCard({ chef }) {
         <h2>
           {chef.firstName} {chef.lastName}
         </h2>
+
         <img src={chef.profilePicture} className="chef-image"/>
       </div>
       <p>Price: {chef.price}</p>

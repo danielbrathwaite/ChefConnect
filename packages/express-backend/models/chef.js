@@ -60,9 +60,15 @@ const ChefSchema = new mongoose.Schema(
       required: true
     },
     reviews: {
-      type: [ReviewSchema],
-      required: false,
+        type: [ReviewSchema],
+        required: false
     },
+    profilePicture: {
+      type: String
+    },
+    foodGallery: {
+      type: [String]
+    }
   },
   { collection: "chefs_list" },
 );
