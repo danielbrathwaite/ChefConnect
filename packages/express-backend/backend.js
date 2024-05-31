@@ -1,7 +1,7 @@
 import express, { query } from "express";
 import cors from "cors";
 import multer from "multer";
-
+import bodyParser from "body-parser"
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
@@ -17,21 +17,12 @@ cloudinary.config({
   api_secret: 'P8WYE5K596_PalkxT6DAGuyx6uE' 
 });
 
-async function handleUpload(file) {
-  const res = await cloudinary.uploader.upload(file, {
-    resource_type: "auto",
-  });
-  return res;
-}
-const storage = new multer.memoryStorage();
-const upload = multer({
-  storage,
-});
-
 
 const app = express();
 const port = 8000;
 
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(express.json());
 
@@ -128,6 +119,87 @@ app.put('/chefs/:id', async (req, res) => {
   }
 });
 
+//sends image gallery of requested chef
+app.get('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    chefService.findChefById(id).then((chef) => {
+    if (chef === undefined || chef === null)
+      res.status(404).send("Resource not found.");
+    else {
+    //send gallery straight up
+    res.json({message: "Gallery retrieved successfully.", foodGallery: chef.foodGallery})
+  }
+    
+  })}  catch (error) {
+    console.error('Error getting images:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//adds an array of image(s) in base64 to gallery of requested chef, security needed?
+app.post('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    let foodGallery = req.body.foodGallery;
+
+    if (!Array.isArray(foodGallery) || !foodGallery.every(item => typeof item === 'string')) {
+      return res.status(400).send("Invalid input: foodGallery should be an array of strings.");
+    }
+
+    const chef = await chefService.findChefById(id);
+
+    if (!chef) {
+      return res.status(404).send("Resource not found.");
+    }
+
+    // Convert gallery straight up
+    let galleryUrls = [];
+    for (let i = 0; i < foodGallery.length; i++) {
+      const uploadResponse = await cloudinary.uploader.upload(foodGallery[i], {
+        folder: 'foodgallery',
+        use_filename: true,
+        unique_filename: false,
+      });
+      galleryUrls.push(uploadResponse.secure_url);
+    }
+
+    chef.foodGallery = chef.foodGallery.concat(galleryUrls);
+    await chef.save();
+
+    res.status(201).json({ message: "Gallery posted successfully.", foodGallery: chef.foodGallery });
+  } catch (error) {
+    console.error('Error getting images:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.delete('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    const itemToDelete = req.body.deletedItem;
+
+    if (!itemToDelete) {
+      return res.status(400).json({ message: "Invalid input: item to delete is required." });
+    }
+
+    const chef = await chefService.findChefById(id);
+
+    if (!chef) {
+      return res.status(404).json({ message: "Resource not found." });
+    }
+
+    // Filter out the item to delete
+    chef.foodGallery = chef.foodGallery.filter(item => item !== itemToDelete);
+
+    await chef.save();
+
+    res.status(200).json({ message: "Item deleted successfully.", foodGallery: chef.foodGallery });
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 // homepage stuff
 app.get("/", (req, res) => {
