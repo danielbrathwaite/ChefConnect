@@ -8,6 +8,13 @@ import chefList from "./models/chefList.js";
 import Chef from "./models/chef.js";
 import menuItem from "./models/menuItem.js";
 
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+  cloud_name: 'dslmarna0', 
+  api_key: '743962474496839', 
+  api_secret: 'P8WYE5K596_PalkxT6DAGuyx6uE' 
+});
 
 const app = express();
 const port = 8000;
@@ -19,13 +26,13 @@ app.use(express.json());
 // to a url, stores that url in the database  
 app.post('/chefs', async (req, res) => {
   try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, image, foodGallery} = req.body;
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, profilePic, foodGallery} = req.body;
     console.log("sent in json", req.body)
     //console.log("image", image)
     // Upload image to Cloudinary
-    let profilePicture;
-    if (image != null){
-    const uploadResponse = await cloudinary.uploader.upload(image, {
+    let profilePicture
+    if (profilePic != null){
+    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
       folder: 'chefs',
       use_filename: true,
       unique_filename: false,
@@ -34,7 +41,7 @@ app.post('/chefs', async (req, res) => {
     profilePicture = uploadResponse.secure_url;
   }
   else{
-    profilePicture = 'noimage';
+    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
   }
     const newChef = {
       email,
@@ -62,12 +69,12 @@ app.post('/chefs', async (req, res) => {
 //IN PROGRESS, updates the chef profile
 app.put('/chefs/:id', async (req, res) => {
   try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, image } = req.body;
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, profilePic } = req.body;
   
     // Upload image to Cloudinary
     let profilePicture;
-    if (image != null){
-    const uploadResponse = await cloudinary.uploader.upload(image, {
+    if (profilePic != null){
+    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
       folder: 'chefs',
       use_filename: true,
       unique_filename: false,
