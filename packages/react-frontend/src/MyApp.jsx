@@ -13,17 +13,7 @@ import MenuPage from "./MenuPage";
 
 
 function MyApp() {
-  const [chefData, setChefData] = useState([
-    {
-      firstName: "Chef",
-      lastName: "Bob", // the rest of the data
-      price: "$",
-      cuisines: "Italian",
-      location: "New York",
-      rating: "5",
-      profilePicture: "j@gmail.com",
-    }
-  ]);
+  const [chefData, setChefData] = useState([]);
   const [chefProfiles, setChefProfiles] = useState([]);
   const updateList = (newChefProfile) => {
     setChefProfiles([...chefProfiles, newChefProfile]);

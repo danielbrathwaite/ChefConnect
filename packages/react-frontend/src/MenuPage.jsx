@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Table from "./Table";
 import { useLocation } from "react-router-dom";
 
@@ -12,6 +13,7 @@ function MenuPageHeader({ chef })
     </div>
   );
 }
+
 
 function MenuPage()
 {
