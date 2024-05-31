@@ -209,6 +209,37 @@ app.get("/chefs/:chefId/reviews", async (req, res) => {
   }
 });
 
+app.post("/chefs/:chefId/reviews", async (req, res) => {
+  try {
+    const chefId = req.params.chefId;
+    const { rating, comment } = req.body;
+
+    if (!rating) {
+      return res.status(400).json({ message: 'Rating is required' });
+    }
+
+    const chef = await Chef.findById(chefId);
+    if (!chef) {
+      return res.status(404).json({ message: 'Chef not found' });
+    }
+
+    const newReview = {
+      rating,
+      comment,
+      date: new Date()
+    };
+
+    chef.reviews.push(newReview);
+
+    await chef.save();
+
+    res.status(201).json({ message: 'Review added successfully', review: newReview });
+  } catch (error) {
+    console.error('Error adding review:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 app.get("/users/:id", (req, res) => {
     const id = req.params["userId"];
     userService.findUserById(id).then((result) => {
