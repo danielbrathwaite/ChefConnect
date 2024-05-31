@@ -175,6 +175,20 @@ app.get("/chefs/:chefId/menu", async (req, res) => {
   }
 });
 
+app.get("/chefs/:chefId/reviews", async (req, res) => {
+  try {
+    const chefId = req.params.chefId;
+    const chef = await Chef.findById(chefId, 'reviews');
+    if (!chef) {
+      return res.status(404).json({ message: 'Chef not found' });
+    }
+    res.status(200).json(chef.reviews);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 app.get("/users/:id", (req, res) => {
     const id = req.params["userId"];
     userService.findUserById(id).then((result) => {
