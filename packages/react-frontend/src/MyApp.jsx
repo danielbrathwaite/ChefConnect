@@ -177,7 +177,7 @@ function addAuthHeader(otherHeaders = {}) {
         <Route path="/signup" element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />} />
         <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
         <Route path="/profile" element={<ChefProfile handleSubmit={addChefProfile}/>} />
-        <Route path="/menu" element={<MenuPage/>} /> 
+        <Route path="/chef/:id/menu" element={<MenuPage/>} /> 
       </Routes>
     </Router>
   );

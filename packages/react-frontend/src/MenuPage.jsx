@@ -6,7 +6,7 @@ function MenuPageHeader({ chef })
   return(
     <div className="container">
         <h2>
-          Chef {chef.firstName} {chef.lastName}
+          Chef {chef.firstName} {chef.lastName}'s Menu 
         </h2>
         <img src={chef.profilePicture} className="chef-image"/>
     </div>
@@ -20,13 +20,11 @@ function MenuPage()
   const { menuData = [], chef = {} } = location.state || {};
 
   return (
-    <div>
-      <h1> menu</h1>
+    <div className="container">
       <MenuPageHeader chef={chef}/>
       <div>
       <Table menu={menuData}/>
       </div>
-      
     </div>
   );
 }

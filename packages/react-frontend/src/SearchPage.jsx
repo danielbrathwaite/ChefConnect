@@ -26,7 +26,7 @@ function ChefCard({ chef }) {
       }
     })
     .then((menuData) => { 
-      navigate("/menu", { state: { menuData, chef } });
+      navigate(`/chef/${chefId}/menu`, { state: { menuData, chef } });
       console.log(menuData);
       setMenuData(menuData);
     })
