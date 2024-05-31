@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
+import MenuPage from "./MenuPage";
 
 
 function MyApp() {
@@ -167,6 +168,7 @@ function addAuthHeader(otherHeaders = {}) {
   }
 }
  
+
   return (
     <Router>
       <Routes>
@@ -175,6 +177,7 @@ function addAuthHeader(otherHeaders = {}) {
         <Route path="/signup" element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />} />
         <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
         <Route path="/profile" element={<ChefProfile handleSubmit={addChefProfile}/>} />
+        <Route path="/menu" element={<MenuPage/>} /> 
       </Routes>
     </Router>
   );

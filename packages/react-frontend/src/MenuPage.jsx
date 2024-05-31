@@ -1,15 +1,5 @@
 import Table from "./Table";
-
-function MenuPage(props) {
-  const [menuItem, setMenuItem] = useState({
-    chef: "",
-    foodName: "",
-    availability: "",
-    price: "",
-    cuisine: "",
-    description: "",
-  });
-}
+import { useLocation } from "react-router-dom";
 
 function MenuPageHeader({ chef })
 {
@@ -23,13 +13,22 @@ function MenuPageHeader({ chef })
   );
 }
 
-function MenuPage(props)
+function MenuPage()
 {
-  const menuData = props.menuItem;
+
+  const location = useLocation();
+  const { menuData = [], chef = {} } = location.state || {};
+
   return (
     <div>
-      <MenuPageHeader/>
-      {/* <Table menuData={menuData}/> */}
+      <h1> menu</h1>
+      <MenuPageHeader chef={chef}/>
+      <div>
+      <Table menu={menuData}/>
+      </div>
+      
     </div>
   );
 }
+
+export default MenuPage;
