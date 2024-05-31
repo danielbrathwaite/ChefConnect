@@ -105,7 +105,6 @@ app.put('/chefs/:id', async (req, res) => {
       price,
       profilePicture
     };
-    console.log("cheef", newChef)
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
