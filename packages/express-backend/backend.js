@@ -147,7 +147,7 @@ app.get("/users", (req, res) => {
 app.get("/search", async (req, res) => {
   try {
     // Extract query parameters from the request
-    const { name, cuisine, location, minPrice, maxPrice, minRating } = req.query;
+    const { name, cuisine, location, minPrice, maxPrice, minRating, sortField, sortOrder } = req.query;
 
     // Construct the filter object based on the provided parameters
     const filter = {};
@@ -164,20 +164,56 @@ app.get("/search", async (req, res) => {
       if (minPrice) filter.price.$gte = parseInt(minPrice);
       if (maxPrice) filter.price.$lte = parseInt(maxPrice);
     }
+
+    // Aggregation pipeline to calculate average rating and filter/sort results
+    const pipeline = [
+      { $match: filter },
+      {
+        $addFields: {
+          averageRating: { $avg: "$reviews.rating" }
+        }
+      },
+    ];
+
+    // Filter by minimum average rating if provided
     if (minRating) {
-      filter['reviews.rating'] = { $gte: parseInt(minRating) };
+      pipeline.push({ $match: { averageRating: { $gte: parseInt(minRating) } } });
     }
 
-    // Query the database with the constructed filter
-    const chefs = await Chef.find(filter).sort({ firstName: 1, lastName: 1 }).select('firstName lastName cuisines location price reviews profilePicture');
+    // Construct the sort object based on the provided parameters
+    let sort = {};
+    if (sortField && (sortField === 'price' || sortField === 'averageRating')) {
+      sort[sortField] = sortOrder && sortOrder.toLowerCase() === 'desc' ? -1 : 1;
+      pipeline.push({ $sort: sort });
+    } else {
+      // Default sorting
+      pipeline.push({ $sort: { firstName: 1, lastName: 1 } });
+    }
 
-    // Send the response with the filtered chefs
+    // Project the necessary fields
+    pipeline.push({
+      $project: {
+        firstName: 1,
+        lastName: 1,
+        cuisines: 1,
+        location: 1,
+        price: 1,
+        averageRating: 1,
+        profilePicture: 1,
+      }
+    });
+
+    // Execute the aggregation pipeline
+    const chefs = await Chef.aggregate(pipeline);
+
+    // Send the response with the filtered and sorted chefs
     res.json(chefs);
   } catch (error) {
     console.error('Error searching for chefs:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 app.get("/chefs/:chefId/menu", async (req, res) => {
   try {
