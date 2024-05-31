@@ -5,13 +5,20 @@ function SignUp(props) {
   const [creds, setCreds] = useState({
     username: "",
     pwd: "",
+    usertype: "chef",
   });
 
   const navigate = useNavigate();
-  const signupReroute = () => navigate('/search');
+  const signupReroute = (creds) => {
+    if(creds.usertype === "chef"){
+      navigate('/profile', { state: { username: creds.username, password: creds.pwd } });
+    } else {
+      navigate('/search');
+    }
+  }
 
   return (
-    <div class="small-container">
+    <div className="small-container">
       <Link to="/">Home</Link>
       <form>
         <label htmlFor="username">UserName (email) </label>
@@ -30,6 +37,11 @@ function SignUp(props) {
           value={creds.pwd}
           onChange={handleChange}
         />
+        <label htmlFor="usertype"> I'm here to ...</label>
+        <select name="usertype" id="usertype" value={creds.usertype} onChange={handleChange}>
+          <option value="chef">be a chef</option>
+          <option value="user">browse</option>
+        </select>
         <input
           type="button"
           value={props.buttonLabel || "Log In"}
@@ -48,6 +60,9 @@ function SignUp(props) {
       case "password":
         setCreds({ ...creds, pwd: value });
         break;
+      case "usertype":
+        setCreds({ ...creds, usertype: value });
+        break;
     }
   }
 
@@ -55,12 +70,12 @@ function SignUp(props) {
     props.handleSubmit(creds)
       .then((response) => {
         if (response.status === 201) {
-          signupReroute();
+          signupReroute(creds);
         } else {
           // Handle bad login
         }
       });
-    setCreds({ username: "", pwd: "" });
+    setCreds({ username: "", pwd: "" , usertype: "chef"});
   }
 }
 export default SignUp;

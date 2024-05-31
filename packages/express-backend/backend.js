@@ -7,6 +7,7 @@ import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
 import chefList from "./models/chefList.js";
 import Chef from "./models/chef.js";
+import menuItem from "./models/menuItem.js";
 
 import {v2 as cloudinary} from 'cloudinary';
           
@@ -46,7 +47,6 @@ app.post('/chefs', async (req, res) => {
   else{
     profilePicture = 'noimage';
   }
-    // Save chef data in the database (example using a mock database function)
     const newChef = {
       email,
       password,
@@ -61,7 +61,6 @@ app.post('/chefs', async (req, res) => {
       foodGallery
     };
     console.log("cheef", newChef)
-    // Mock function to save chef to the database
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
@@ -71,12 +70,11 @@ app.post('/chefs', async (req, res) => {
   }
 });
 
-//in progress, updates the chef profile
+//IN PROGRESS, updates the chef profile
 app.put('/chefs/:id', async (req, res) => {
   try {
     const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, image } = req.body;
-    //console.log("sent in json", req.body)
-    //console.log("image", image)
+  
     // Upload image to Cloudinary
     let profilePicture;
     if (image != null){
@@ -100,7 +98,6 @@ app.put('/chefs/:id', async (req, res) => {
       });
       
     } 
-    // Save chef data in the database (example using a mock database function)
     const newChef = {
       email,
       password,
@@ -113,7 +110,6 @@ app.put('/chefs/:id', async (req, res) => {
       profilePicture
     };
     console.log("cheef", newChef)
-    // Mock function to save chef to the database
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
@@ -223,7 +219,7 @@ app.get("/users", (req, res) => {
 app.get("/search", async (req, res) => {
   try {
     // Extract query parameters from the request
-    const { name, cuisine, location, minPrice, maxPrice, minRating } = req.query;
+    const { name, cuisine, location, minPrice, maxPrice, minRating, sortField, sortOrder } = req.query;
 
     // Construct the filter object based on the provided parameters
     const filter = {};
@@ -240,18 +236,115 @@ app.get("/search", async (req, res) => {
       if (minPrice) filter.price.$gte = parseInt(minPrice);
       if (maxPrice) filter.price.$lte = parseInt(maxPrice);
     }
+
+    // Aggregation pipeline to calculate average rating and filter/sort results
+    const pipeline = [
+      { $match: filter },
+      {
+        $addFields: {
+          averageRating: { $avg: "$reviews.rating" }
+        }
+      },
+    ];
+
+    // Filter by minimum average rating if provided
     if (minRating) {
-      filter['reviews.rating'] = { $gte: parseInt(minRating) };
+      pipeline.push({ $match: { averageRating: { $gte: parseInt(minRating) } } });
     }
 
-    // Query the database with the constructed filter
-    const chefs = await Chef.find(filter).select('firstName lastName cuisines location price reviews');
+    // Construct the sort object based on the provided parameters
+    let sort = {};
+    if (sortField && (sortField === 'price' || sortField === 'averageRating')) {
+      sort[sortField] = sortOrder && sortOrder.toLowerCase() === 'desc' ? -1 : 1;
+      pipeline.push({ $sort: sort });
+    } else {
+      // Default sorting
+      pipeline.push({ $sort: { firstName: 1, lastName: 1 } });
+    }
 
-    // Send the response with the filtered chefs
+    // Project the necessary fields
+    pipeline.push({
+      $project: {
+        firstName: 1,
+        lastName: 1,
+        cuisines: 1,
+        location: 1,
+        price: 1,
+        averageRating: 1,
+        profilePicture: 1,
+      }
+    });
+
+    // Execute the aggregation pipeline
+    const chefs = await Chef.aggregate(pipeline);
+
+    // Send the response with the filtered and sorted chefs
     res.json(chefs);
   } catch (error) {
     console.error('Error searching for chefs:', error);
     res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+app.get("/chefs/:chefId/menu", async (req, res) => {
+  try {
+    const chefId = req.params.chefId;
+    // Find menu items by chefId and populate the 'chef' field with the chef's firstName and lastName
+    const menuItems = await menuItem.find({ chef: chefId });
+
+    if (!menuItems || menuItems.length === 0) {
+      return res.status(404).json({ message: "Chef or menu items not found" });
+    }
+
+    res.status(200).json(menuItems);
+  } catch (error) {
+    res.status(500).json({ message: `An error occurred: ${error.message}` });
+  }
+});
+
+app.get("/chefs/:chefId/reviews", async (req, res) => {
+  try {
+    const chefId = req.params.chefId;
+    const chef = await Chef.findById(chefId, 'reviews');
+    if (!chef) {
+      return res.status(404).json({ message: 'Chef not found' });
+    }
+    res.status(200).json(chef.reviews);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post("/chefs/:chefId/reviews", async (req, res) => {
+  try {
+    const chefId = req.params.chefId;
+    const { rating, comment } = req.body;
+
+    if (!rating) {
+      return res.status(400).json({ message: 'Rating is required' });
+    }
+
+    const chef = await Chef.findById(chefId);
+    if (!chef) {
+      return res.status(404).json({ message: 'Chef not found' });
+    }
+
+    const newReview = {
+      rating,
+      comment,
+      date: new Date()
+    };
+
+    chef.reviews.push(newReview);
+
+    await chef.save();
+
+    res.status(201).json({ message: 'Review added successfully', review: newReview });
+  } catch (error) {
+    console.error('Error adding review:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

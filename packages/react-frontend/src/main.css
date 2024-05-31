@@ -219,6 +219,7 @@ button::-moz-focus-inner,
   padding: 0;
 }
 
+
 /**
    * Restore the focus styles unset by the previous rule.
    */
@@ -568,6 +569,14 @@ dd {
   margin-bottom: 0.5rem;
 }
 
+.price-filter{
+  display:flex;
+}
+
+.price-filter input{
+  margin-right: 10px;
+}
+
 .full-container {
   max-width: 100%;
   padding: 0 1rem;
@@ -589,6 +598,11 @@ dd {
 .medium-container {
   max-width: 1000px;
 }
+
+.dropdown{
+  max-width: 200px;
+}
+
 
 .content-section {
   padding: 30px 0;
@@ -804,10 +818,10 @@ button,
 [type="button"] {
   -webkit-appearance: none;
   display: inline-block;
-  border: 1px solid #0366ee;
+  border: 1px solid #98f780;
   border-radius: 4px;
-  background: #0366ee;
-  color: #ffffff;
+  background: #98f780;
+  color: #02270d;
   font-weight: 600;
   font-family:
     -apple-system,
@@ -833,9 +847,9 @@ button:hover,
 [type="submit"]:hover,
 [type="reset"]:hover,
 [type="button"]:hover {
-  border: 1px solid #0250bc;
-  background: #0250bc;
-  color: #ffffff;
+  border: 1px solid #98f780;
+  background: #98f780;
+  color: #02270d;
   text-decoration: none;
 }
 
@@ -851,9 +865,9 @@ button:active,
 [type="reset"]:active,
 [type="button"]:focus,
 [type="button"]:active {
-  border: 1px solid #0250bc;
-  background: #0250bc;
-  color: #ffffff;
+  border: 1px solid #98f780;
+  background: #98f780;
+  color: #02270d;
   text-decoration: none;
 }
 
@@ -1167,6 +1181,20 @@ caption {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chef-image{
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 16px;
+  margin-left: 16px;
+}
 .card h2 {
   margin: 0;
   font-size: 1.5em;
