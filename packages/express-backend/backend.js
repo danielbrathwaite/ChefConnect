@@ -1,6 +1,7 @@
 import express, { query } from "express";
 import cors from "cors";
-
+import multer from "multer";
+import bodyParser from "body-parser"
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
@@ -16,9 +17,12 @@ cloudinary.config({
   api_secret: 'P8WYE5K596_PalkxT6DAGuyx6uE' 
 });
 
+
 const app = express();
 const port = 8000;
 
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(express.json());
 
@@ -114,6 +118,87 @@ app.put('/chefs/:id', async (req, res) => {
   }
 });
 
+//sends image gallery of requested chef
+app.get('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    chefService.findChefById(id).then((chef) => {
+    if (chef === undefined || chef === null)
+      res.status(404).send("Resource not found.");
+    else {
+    //send gallery straight up
+    res.json({message: "Gallery retrieved successfully.", foodGallery: chef.foodGallery})
+  }
+    
+  })}  catch (error) {
+    console.error('Error getting images:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//adds an array of image(s) in base64 to gallery of requested chef, security needed?
+app.post('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    let foodGallery = req.body.foodGallery;
+
+    if (!Array.isArray(foodGallery) || !foodGallery.every(item => typeof item === 'string')) {
+      return res.status(400).send("Invalid input: foodGallery should be an array of strings.");
+    }
+
+    const chef = await chefService.findChefById(id);
+
+    if (!chef) {
+      return res.status(404).send("Resource not found.");
+    }
+
+    // Convert gallery straight up
+    let galleryUrls = [];
+    for (let i = 0; i < foodGallery.length; i++) {
+      const uploadResponse = await cloudinary.uploader.upload(foodGallery[i], {
+        folder: 'foodgallery',
+        use_filename: true,
+        unique_filename: false,
+      });
+      galleryUrls.push(uploadResponse.secure_url);
+    }
+
+    chef.foodGallery = chef.foodGallery.concat(galleryUrls);
+    await chef.save();
+
+    res.status(201).json({ message: "Gallery posted successfully.", foodGallery: chef.foodGallery });
+  } catch (error) {
+    console.error('Error getting images:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.delete('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    const itemToDelete = req.body.deletedItem;
+
+    if (!itemToDelete) {
+      return res.status(400).json({ message: "Invalid input: item to delete is required." });
+    }
+
+    const chef = await chefService.findChefById(id);
+
+    if (!chef) {
+      return res.status(404).json({ message: "Resource not found." });
+    }
+
+    // Filter out the item to delete
+    chef.foodGallery = chef.foodGallery.filter(item => item !== itemToDelete);
+
+    await chef.save();
+
+    res.status(200).json({ message: "Item deleted successfully.", foodGallery: chef.foodGallery });
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 // homepage stuff
 app.get("/", (req, res) => {
@@ -133,7 +218,7 @@ app.get("/users", (req, res) => {
 app.get("/search", async (req, res) => {
   try {
     // Extract query parameters from the request
-    const { name, cuisine, location, minPrice, maxPrice, minRating } = req.query;
+    const { name, cuisine, location, minPrice, maxPrice, minRating, sortField, sortOrder } = req.query;
 
     // Construct the filter object based on the provided parameters
     const filter = {};
@@ -150,20 +235,56 @@ app.get("/search", async (req, res) => {
       if (minPrice) filter.price.$gte = parseInt(minPrice);
       if (maxPrice) filter.price.$lte = parseInt(maxPrice);
     }
+
+    // Aggregation pipeline to calculate average rating and filter/sort results
+    const pipeline = [
+      { $match: filter },
+      {
+        $addFields: {
+          averageRating: { $avg: "$reviews.rating" }
+        }
+      },
+    ];
+
+    // Filter by minimum average rating if provided
     if (minRating) {
-      filter['reviews.rating'] = { $gte: parseInt(minRating) };
+      pipeline.push({ $match: { averageRating: { $gte: parseInt(minRating) } } });
     }
 
-    // Query the database with the constructed filter
-    const chefs = await Chef.find(filter).sort({ firstName: 1, lastName: 1 }).select('firstName lastName cuisines location price reviews profilePicture');
+    // Construct the sort object based on the provided parameters
+    let sort = {};
+    if (sortField && (sortField === 'price' || sortField === 'averageRating')) {
+      sort[sortField] = sortOrder && sortOrder.toLowerCase() === 'desc' ? -1 : 1;
+      pipeline.push({ $sort: sort });
+    } else {
+      // Default sorting
+      pipeline.push({ $sort: { firstName: 1, lastName: 1 } });
+    }
 
-    // Send the response with the filtered chefs
+    // Project the necessary fields
+    pipeline.push({
+      $project: {
+        firstName: 1,
+        lastName: 1,
+        cuisines: 1,
+        location: 1,
+        price: 1,
+        averageRating: 1,
+        profilePicture: 1,
+      }
+    });
+
+    // Execute the aggregation pipeline
+    const chefs = await Chef.aggregate(pipeline);
+
+    // Send the response with the filtered and sorted chefs
     res.json(chefs);
   } catch (error) {
     console.error('Error searching for chefs:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 app.get("/chefs/:chefId/menu", async (req, res) => {
   try {
