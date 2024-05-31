@@ -150,6 +150,42 @@ app.get('/chefs/:id/gallery', async (req, res) => {
   }
 });
 
+//adds an array of image(s) in base64 to gallery of requested chef, security needed?
+app.post('/chefs/:id/gallery', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    foodGallery = req.body.foodGallery
+    
+    if (!Array.isArray(foodGallery) || !foodGallery.every(foodGallery => typeof foodGallery === 'string')) {
+      return res.status(400).send("Invalid input: foodGallery should be an array of strings.");
+    }
+
+    chefService.findChefById(id).then((chef) => {
+    if (chef === undefined || chef === null)
+      res.status(404).send("Resource not found.");
+    else {
+    //convert gallery straight up
+    let galleryUrls = [];
+    for (let i = 0; i < foodGallery.length; i++) {
+      let uploadResponse = cloudinary.uploader.upload(foodGallery[i], {
+        folder: 'foodgallery',
+        use_filename: true,
+        unique_filename: false,
+      });
+      galleryUrls.push(uploadResponse.secure_url)
+    }
+    console.log(galleryUrls)
+    chef.reviews = chef.foodGallery.concat(galleryUrls)
+    chef.save();
+    res.status(201).json({message: "Gallery posted successfully.", foodGallery: chef.foodGallery})
+  }
+    
+  })}  catch (error) {
+    console.error('Error getting images:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 /*
 app.post("/chefs", (req, res) => {
   const chef = req.body;
