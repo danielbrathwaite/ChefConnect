@@ -1,0 +1,38 @@
+name: Build and Deploy to Azure Web App
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install --workspaces=false
+        working-directory: packages/express-backend
+
+      - name: Build the project
+        run: npm run build --if-present
+        working-directory: packages/express-backend
+
+      - name: Run tests
+        run: npm test --if-present
+        working-directory: packages/express-backend
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ChefConnect
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
