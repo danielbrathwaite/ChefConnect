@@ -18,8 +18,9 @@ function Reviews({reviews})
         </div>
       ))}
     </div>
-  );
+  );  
 }
+
 function MenuPageHeader({ chef })
 {
   const settings = {
@@ -29,7 +30,7 @@ function MenuPageHeader({ chef })
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: '10px',
+    // centerPadding: '10px',
   };
 
   return(
@@ -38,6 +39,7 @@ function MenuPageHeader({ chef })
           Chef {chef.firstName} {chef.lastName}'s Menu 
         </h2>
         <img src={chef.profilePicture} className="chef-image"/>
+        <h3 className="gallery-title">Food Gallery</h3>
         <Slider {...settings}>
           {chef.foodGallery.map((imageUrl, index) => (
             <div className="carousel-item" key={index}>
@@ -49,6 +51,27 @@ function MenuPageHeader({ chef })
   );
 }
 
+function ReviewForm()
+{
+  return(
+    <form>
+    <h3>Add a Review</h3>
+    <label htmlFor="comments">Comments</label>
+    <input
+      type="text"
+      name="name"
+      id="name"
+    />
+    <label htmlFor="rating">Rating</label>
+    <input
+      type="number"
+      name="rating"
+      id="rating"
+    />
+    <input type="button" value="Submit Rating" />
+  </form>
+  );
+}
 
 function MenuPage()
 {
@@ -80,6 +103,7 @@ function MenuPage()
       <Table menu={menuData}/>
       </div>
       <Reviews reviews={reviews}/>
+      <ReviewForm/>
     </div>
   );
 }
