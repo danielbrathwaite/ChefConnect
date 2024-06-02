@@ -1232,6 +1232,20 @@ caption {
   border-radius: 50%;
   margin-left: 16px;
 }
+
+.review-date {
+  font-weight: bold;
+}
+
+.review-comment {
+  margin-top: 5px;
+}
+
+
+.review-rating {
+  margin-top: 5px;
+  font-style: italic;
+}
 /*
    * Navigation
    */
