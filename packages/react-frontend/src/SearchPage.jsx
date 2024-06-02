@@ -1,86 +1,109 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import MenuPage from "./MenuPage"
+import { useNavigate } from "react-router-dom";
 
 function ChefCard({ chef }) {
+  const [menuData, setMenuData] = useState(null);
+  const [selectedChef, setSelectedChef] = useState(null);
+  const navigate = useNavigate();
+
+  function getAverageRating(reviews) {
+    if(!reviews || reviews.length === 0){
+        return "No ratings";
+      }
+    const total = reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
+    const avgRating = total / reviews.length;
+    return avgRating;
+  }
+
+  function getMenu(chefId)
+  {
+    const API_PREFIX = "http://localhost:8000";
+    fetch(`${API_PREFIX}/chefs/${chefId}/menu`)
+    .then((response) => {
+      if(response.status === 200){
+        return response.json()
+      }
+    })
+    .then((menuData) => { 
+      navigate(`/chef/${chefId}/menu`, { state: { menuData, chef } });
+      console.log(menuData);
+      setMenuData(menuData);
+    })
+    .catch((error) => {
+      console.error('Error fetching search results:', error);
+    });
+  }
+
   return (
     <div className="card">
       <h2>
         {chef.firstName} {chef.lastName}
       </h2>
+      <img src={chef.profilePicture} className="chef-image"/>
       <p>Price: {chef.price}</p>
       <p>Cuisines: {chef.cuisines}</p>
       <p>Location: {chef.location}</p>
-      <p>Rating: {chef.rating}</p>
-      <button>Menu</button>
+      <p> Average Rating: {getAverageRating(chef.reviews)}</p> 
+      <button onClick={() => getMenu(chef._id)}>Menu</button>
     </div>
   );
 }
 
-function PageHeader(props) {
+function PageHeader({handleSearch}) {
+  const [searchString, setSearchString] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [minRating, setMinRating] = useState(false);
   return (
     <div className="container">
       <center>
         <h1> Chefs List</h1>
       </center>
-      <div className="input-box">
+      <form className="small-container" onSubmit={handleSearch}>
         <input
           type="search"
-          name="search-form"
-          id="search-form"
+          name="search-input"
+          id="search-input"
           className="search-input"
-          placeholder="Search for a Chef"
+          placeholder="Search by Cuisine"
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
         />
-      </div>
+        <div className="price-filter">
+          <input 
+          type="number" id="min-price" placeholder="Min Price" 
+          value={minPrice} 
+          onChange={(e) => setMinPrice(e.target.value)}
+          />
+          <input type="number" id="max-price" placeholder="Max Price" 
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+          />
+        </div>
+        <button type="submit"> Search</button>
+        {/* <div>
+          <label>
+          <input type="checkbox" id="rating-filter" name="rating-filter" 
+            checked={minRating} 
+            onClick={(e) => setMinRating(e.target.checked)}/>
+            4 stars and up
+          </label>
+        </div> */}
+      </form>
     </div>
   );
-}
-
-function TableHeader() {
-  return (
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Price</th>
-        <th>Cuisines</th>
-        <th>Location</th>
-        <th>Rating</th>
-      </tr>
-    </thead>
-  );
-}
-
-function TableBody(props) {
-  const rows = props.chefData.map((row, index) => {
-    return (
-      <tr key={index}>
-        <td>{row.firstName}</td>
-        <td>{row.lastName}</td>
-        <td>{row.price}</td>
-        <td>{row.cuisines}</td>
-        <td>{row.location}</td>
-        <td>{row.rating}</td>
-        <td>
-          <button>Menu</button>
-        </td>
-      </tr>
-    );
-  });
-  return <tbody>{rows}</tbody>;
 }
 
 function SearchPage(props) {
   return (
     <div>
-      <PageHeader />
-      <center>
-        <TableHeader></TableHeader>
-        <TableBody chefData={props.chefData} />
-      </center>
-      {/* <div className="card-container">
+      <PageHeader handleSearch={props.handleSearch}/>
+      <div className="card-container">
                   {props.chefData.map((chef, index) => (
                     <ChefCard key={index} chef={chef} />
                   ))}
-                </div> */}
+                </div>
     </div>
   );
 }

@@ -5,23 +5,26 @@ function TableHeader() {
     <thead>
       <tr>
         <th>Name</th>
-        <th>Job</th>
-        <th>ID</th>
-        <th>Remove</th>
+        <th> Price</th>
+        <th> Cuisine</th>
+        <th> Description</th>
+        <th> Availability </th>
       </tr>
     </thead>
   );
 }
 
-function TableBody(props) {
-  const rows = props.characterData.map((row, index) => {
+function TableBody({menu}) {
+  const rows = menu.map((row, index) => {
     return (
       <tr key={index}>
-        <td>{row.name}</td>
-        <td>{row.job}</td>
-        <td>{row._id}</td>
+        <td>{row.foodName}</td>
+        <td>{row.price}</td>
+        <td>{row.cuisine}</td>
+        <td>{row.description}</td>
+        <td>{row.availability ? "Available" : "Not Available"}</td>
         <td>
-          <button onClick={() => props.removeCharacter(index)}>Delete</button>
+          <button>Add to cart</button>
         </td>
       </tr>
     );
@@ -29,13 +32,12 @@ function TableBody(props) {
   return <tbody>{rows}</tbody>;
 }
 
-function Table(props) {
+function Table({menu}) {
   return (
     <table>
       <TableHeader />
       <TableBody
-        characterData={props.characterData}
-        removeCharacter={props.removeCharacter}
+        menu={menu}
       />
     </table>
   );
