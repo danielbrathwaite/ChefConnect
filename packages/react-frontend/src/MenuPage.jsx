@@ -113,6 +113,7 @@ function ReviewForm({chefId})
       onChange={ratingChanged}
       size={24}
       activeColor="#ffd700"
+      isHalf={true}
     />
       {/* type="number"
       name="rating"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MenuPage from "./MenuPage"
 import { useNavigate } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 
 function ChefCard({ chef }) {
   const [menuData, setMenuData] = useState(null);
@@ -10,14 +11,14 @@ function ChefCard({ chef }) {
   function getAverageRating(chef) {
     if(chef.averageRating)
       {
-        return chef.averageRating.toFixed(1);
+        return chef.averageRating.toFixed(2);
       }
     if(!chef.reviews || chef.reviews.length === 0){
-        return "No ratings";
+        return 0;
       }
     const total = chef.reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
     const avgRating = total / chef.reviews.length;
-    return avgRating.toFixed(1);
+    return avgRating.toFixed(2);
   }
 
   function getMenu(chefId)
@@ -48,7 +49,16 @@ function ChefCard({ chef }) {
       <p>Price: {chef.price}</p>
       <p>Cuisines: {chef.cuisines.join(", ")}</p>
       <p>Location: {chef.location}</p>
-      <p> Average Rating: {getAverageRating(chef)}</p> 
+      <p> Average Rating: 
+      <ReactStars
+        count={5}
+        value={parseFloat(getAverageRating(chef))}
+        size={24}
+        activeColor="#ffd700"
+        edit={false}
+        isHalf={true}
+      />
+      </p> 
       <button onClick={() => getMenu(chef._id)}>Menu</button>
     </div>
   );
