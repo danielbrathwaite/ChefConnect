@@ -47,4 +47,4 @@ const foodOrderSchema = new mongoose.Schema({
 
 const foodOrder = mongoose.model('foodOrder', foodOrderSchema);
 
-module.exports = foodOrder;
+export default foodOrder;
