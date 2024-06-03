@@ -31,11 +31,11 @@ app.use(express.json());
 // to a url, stores that url in the database  
 app.post('/chefs', async (req, res) => {
   try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, image, foodGallery} = req.body;
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, profilePic, foodGallery} = req.body;
     // Upload image to Cloudinary
     let profilePicture;
-    if (image != null){
-    const uploadResponse = await cloudinary.uploader.upload(image, {
+    if (profilePic != null){
+    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
       folder: 'chefs',
       use_filename: true,
       unique_filename: false,
@@ -107,7 +107,6 @@ app.put('/chefs/:id', async (req, res) => {
       price,
       profilePicture
     };
-    console.log("cheef", newChef)
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
