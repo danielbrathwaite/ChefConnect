@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ReactStars from "react-rating-stars-component";
 
 function Reviews({reviews})
 {
@@ -62,8 +63,7 @@ function ReviewForm({chefId})
   const [comments, setComments] = useState("");
   const [rating, setRating] = useState(0);
 
-  const handleRatingChange = (e) => { 
-    const newRating = e.target.value;
+  const ratingChanged = (newRating) => { 
     if (newRating >= 1 && newRating <= 5) {
       setRating(newRating);
     }
@@ -108,15 +108,20 @@ function ReviewForm({chefId})
       onChange={(e) => setComments(e.target.value)}
     />
     <label htmlFor="rating">Rating</label>
-    <input
-      type="number"
+      <ReactStars
+      count={5}
+      onChange={ratingChanged}
+      size={24}
+      activeColor="#ffd700"
+    />
+      {/* type="number"
       name="rating"
       id="rating"
       value={rating}
       onChange={handleRatingChange}
       min="1"
       max="5"
-    />
+    /> */}
     <input type="submit" value="Submit Rating" />
   </form>
   );
