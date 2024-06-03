@@ -31,7 +31,7 @@ app.use(express.json());
 // to a url, stores that url in the database  
 app.post('/chefs', async (req, res) => {
   try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, image, foodGallery} = req.body;
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, profilePic, foodGallery} = req.body;
     // Upload image to Cloudinary
     let profilePicture
     if (profilePic != null){
@@ -44,7 +44,6 @@ app.post('/chefs', async (req, res) => {
     profilePicture = uploadResponse.secure_url;
   }
   else{
-    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
     profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
   }
     const newChef = {
