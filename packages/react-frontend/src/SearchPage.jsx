@@ -8,12 +8,16 @@ function ChefCard({ chef }) {
   const navigate = useNavigate();
 
   function getAverageRating(chef) {
+    if(chef.averageRating)
+      {
+        return chef.averageRating.toFixed(1);
+      }
     if(!chef.reviews || chef.reviews.length === 0){
         return "No ratings";
       }
     const total = chef.reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
     const avgRating = total / chef.reviews.length;
-    return avgRating;
+    return avgRating.toFixed(1);
   }
 
   function getMenu(chefId)
@@ -42,10 +46,9 @@ function ChefCard({ chef }) {
       </h2>
       <img src={chef.profilePicture} className="chef-image"/>
       <p>Price: {chef.price}</p>
-      <p>Cuisines: {chef.cuisines}</p>
+      <p>Cuisines: {chef.cuisines.join(",")}</p>
       <p>Location: {chef.location}</p>
       <p> Average Rating: {getAverageRating(chef)}</p> 
-      {/* <p> Average Rating: {chef.averageRating}</p> */}
       <button onClick={() => getMenu(chef._id)}>Menu</button>
     </div>
   );
@@ -59,7 +62,7 @@ function PageHeader({handleSearch}) {
   return (
     <div className="container">
       <center>
-        <h1> Chefs List</h1>
+        <h1> ChefConnect</h1>
       </center>
       <form className="small-container" onSubmit={handleSearch}>
         <input
@@ -87,7 +90,7 @@ function PageHeader({handleSearch}) {
           <input type="checkbox" id="rating-filter" name="rating-filter" 
             checked={minRating} 
             onChange={(e) => setMinRating(e.target.checked)}/>
-            4 stars and up
+             4 stars and up 
           </label>
         </div>
         <button type="submit"> Search</button>
