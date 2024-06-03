@@ -5,7 +5,6 @@ function TableHeader() {
     <thead>
       <tr>
         <th>Name</th>
-        <th> Price</th>
         <th> Cuisine</th>
         <th> Description</th>
         <th> Availability </th>
@@ -19,13 +18,9 @@ function TableBody({menu}) {
     return (
       <tr key={index}>
         <td>{row.foodName}</td>
-        <td>{row.price}</td>
         <td>{row.cuisine}</td>
         <td>{row.description}</td>
         <td>{row.availability ? "Available" : "Not Available"}</td>
-        <td>
-          <button>Add to cart</button>
-        </td>
       </tr>
     );
   });

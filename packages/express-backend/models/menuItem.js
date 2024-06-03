@@ -7,7 +7,7 @@ const menuItemSchema = new mongoose.Schema(
   {
     chef: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Chef",
+      ref: "chefs_list",
       required: true,
     },
     foodName: {

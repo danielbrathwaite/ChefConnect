@@ -115,23 +115,26 @@ function ReviewForm({chefId})
       activeColor="#ffd700"
       isHalf={true}
     />
-      {/* type="number"
-      name="rating"
-      id="rating"
-      value={rating}
-      onChange={handleRatingChange}
-      min="1"
-      max="5"
-    /> */}
     <input type="submit" value="Submit Rating" />
   </form>
   );
 }
 
+function OrderButton({chefId})
+{
+  return(
+    <div>
+      <center>
+        <button> Place an Order </button>
+      </center>
+    </div>
+  )
+}
 function MenuPage()
 {
   const location = useLocation();
   const { menuData = [], chef = {} } = location.state || {};
+  console.log(location.state);
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
@@ -157,6 +160,7 @@ function MenuPage()
       <div>
       <Table menu={menuData}/>
       </div>
+      <OrderButton chefId={chef._id}/>
       <Reviews reviews={reviews}/>
       <ReviewForm chefId={chef._id}/>
     </div>

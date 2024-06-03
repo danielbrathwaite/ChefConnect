@@ -8,6 +8,7 @@ import { authenticateUser, registerUser, loginUser } from "./auth.js";
 import chefList from "./models/chefList.js";
 import Chef from "./models/chef.js";
 import menuItem from "./models/menuItem.js";
+import foodOrder from "./models/foodOrder.js";
 
 import {v2 as cloudinary} from 'cloudinary';
           
@@ -30,9 +31,7 @@ app.use(express.json());
 // to a url, stores that url in the database  
 app.post('/chefs', async (req, res) => {
   try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, profilePic, foodGallery} = req.body;
-    console.log("sent in json", req.body)
-    //console.log("image", image)
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, image, foodGallery} = req.body;
     // Upload image to Cloudinary
     let profilePicture
     if (profilePic != null){
@@ -45,6 +44,7 @@ app.post('/chefs', async (req, res) => {
     profilePicture = uploadResponse.secure_url;
   }
   else{
+    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
     profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
   }
     const newChef = {
@@ -60,7 +60,6 @@ app.post('/chefs', async (req, res) => {
       profilePicture,
       foodGallery
     };
-    console.log("cheef", newChef)
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
@@ -115,6 +114,46 @@ app.put('/chefs/:id', async (req, res) => {
   } catch (error) {
     console.error('Error uploading image or saving data:', error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//sends foodorders of requested chef
+app.get('/chefs/:id/order', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    const Order = await foodOrder.find({ Chef: id });
+
+    const chefExists = await Chef.exists({ _id: id });
+    if (!chefExists) {
+      return res.status(404).json({ message: "Chef not found" });
+    }
+    
+    if (!Order || Order.length === 0) {
+      return res.status(404).json({ message: "Food orders not found" });
+    }
+
+    res.status(200).json(Order);
+   
+    
+  }  catch (error) {
+    console.error('Error getting orders:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//adds an order to the chef
+app.post('/chefs/:id/order', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    req.body.Chef = id;
+    const order = new foodOrder(req.body);
+    await order.save();
+
+
+    res.status(201).json({ message: "Gallery posted successfully.", foodOrder: order });
+  } catch (error) {
+    console.error('Error posting order:', error);
+    res.status(400).send(error);
   }
 });
 
