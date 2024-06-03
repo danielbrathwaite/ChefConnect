@@ -121,13 +121,18 @@ app.put('/chefs/:id', async (req, res) => {
 app.get('/chefs/:id/order', async (req, res) => {
   try {
     const id = req.params["id"];
-    const foodOrder = await foodOrder.find({ Chef: id });
+    const Order = await foodOrder.find({ Chef: id });
 
-    if (!foodOrder || foodOrder.length === 0) {
-      return res.status(404).json({ message: "Chef or food orders not found" });
+    const chefExists = await Chef.exists({ _id: id });
+    if (!chefExists) {
+      return res.status(404).json({ message: "Chef not found" });
+    }
+    
+    if (!Order || Order.length === 0) {
+      return res.status(404).json({ message: "Food orders not found" });
     }
 
-    res.status(200).json(foodOrder);
+    res.status(200).json(Order);
    
     
   }  catch (error) {
