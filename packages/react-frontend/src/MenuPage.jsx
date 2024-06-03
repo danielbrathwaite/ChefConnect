@@ -8,8 +8,9 @@ import "slick-carousel/slick/slick-theme.css";
 function Reviews({reviews})
 {
   return (
-    <div>
+    <div className="reviews-container">
       <h3>Reviews</h3>
+      <div className="reviews-list">
       {reviews.map((review, index) => (
         <div key={index}>
           <p className="review-date">{review.date}</p>
@@ -17,6 +18,7 @@ function Reviews({reviews})
           <p className="review-rating">Rating: {review.rating}</p>
         </div>
       ))}
+      </div>
     </div>
   );  
 }

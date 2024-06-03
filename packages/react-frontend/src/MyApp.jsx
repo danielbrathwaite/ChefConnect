@@ -131,7 +131,13 @@ function MyApp() {
     const searchCuisine = event.target.elements['search-input'].value;
     const minPrice = event.target.elements['min-price'].value;
     const maxPrice = event.target.elements['max-price'].value;
-    fetch(`${API_PREFIX}/search?cuisine=${searchCuisine}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
+    const minRating = event.target.elements['rating-filter'].value;
+    let searchrequest = `${API_PREFIX}/search?cuisine=${searchCuisine}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    if(minRating)
+      {
+        searchrequest += `&minRating=4`;
+      }
+    fetch(searchrequest)
     .then((response) => {
       if(response.status === 200){
         return response.json()
