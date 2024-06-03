@@ -41,6 +41,8 @@ function MenuPageHeader({ chef })
           Chef {chef.firstName} {chef.lastName}'s Menu 
         </h2>
         <img src={chef.profilePicture} className="chef-image"/>
+        {chef.foodGallery && chef.foodGallery.length > 0 && (
+        <>
         <h3 className="gallery-title">Food Gallery</h3>
         <Slider {...settings}>
           {chef.foodGallery.map((imageUrl, index) => (
@@ -49,28 +51,73 @@ function MenuPageHeader({ chef })
             </div>
           ))}
         </Slider>
+        </>
+        )}
     </div>
   );
 }
 
-function ReviewForm()
+function ReviewForm({chefId})
 {
+  const [comments, setComments] = useState("");
+  const [rating, setRating] = useState(0);
+
+  const handleRatingChange = (e) => { 
+    const newRating = e.target.value;
+    if (newRating >= 1 && newRating <= 5) {
+      setRating(newRating);
+    }
+  }
+
+  const addReview = async (e) => {
+    e.preventDefault();
+    const newReview = { comment: comments, rating: rating, date: new Date().toISOString() };
+
+    try {
+      const API_PREFIX = "http://localhost:8000";
+      const response = await fetch(`${API_PREFIX}/chefs/${chefId}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newReview),
+      });
+
+      if (response.status === 201) {
+        const addedReview = await response.json();
+        setComments("");
+        setRating(0);
+      } else {
+        console.error('Failed to add review');
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    }
+  };
+
+
   return(
-    <form>
+    <form onSubmit={addReview}>
     <h3>Add a Review</h3>
     <label htmlFor="comments">Comments</label>
     <input
       type="text"
-      name="name"
-      id="name"
+      name="comments"
+      id="comments"
+      value={comments}
+      onChange={(e) => setComments(e.target.value)}
     />
     <label htmlFor="rating">Rating</label>
     <input
       type="number"
       name="rating"
       id="rating"
+      value={rating}
+      onChange={handleRatingChange}
+      min="1"
+      max="5"
     />
-    <input type="button" value="Submit Rating" />
+    <input type="submit" value="Submit Rating" />
   </form>
   );
 }
@@ -105,7 +152,7 @@ function MenuPage()
       <Table menu={menuData}/>
       </div>
       <Reviews reviews={reviews}/>
-      <ReviewForm/>
+      <ReviewForm chefId={chef._id}/>
     </div>
   );
 }
