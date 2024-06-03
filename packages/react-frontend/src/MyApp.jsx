@@ -5,7 +5,6 @@ import HomePage from './HomePage'
 import Layout from './Layout';
 import ProfileDone from './ProfileDone';
 import Login from './Login';
-import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
