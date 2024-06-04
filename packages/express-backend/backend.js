@@ -340,6 +340,22 @@ app.get("/chefs/:chefId/menu", async (req, res) => {
   }
 });
 
+//adds an order to the chef
+app.post('/chefs/:id/menu', async (req, res) => {
+  try {
+    const id = req.params["id"];
+    req.body.chef = id;
+    const menuitem = new menuItem(req.body);
+    await menuitem.save();
+
+
+    res.status(201).json({ message: "menu item added."});
+  } catch (error) {
+    console.error('Error posting order:', error);
+    res.status(400).send(error);
+  }
+});
+
 app.get("/chefs/:chefId/reviews", async (req, res) => {
   try {
     const chefId = req.params.chefId;
