@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import MenuPage from "./MenuPage"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
 
 function ChefCard({ chef }) {
   const [menuData, setMenuData] = useState(null);
-  const [selectedChef, setSelectedChef] = useState(null);
+  const [avgRating, setAvgRating] = useState(null);
   const navigate = useNavigate();
 
   function getAverageRating(chef) {
@@ -13,7 +13,7 @@ function ChefCard({ chef }) {
       {
         return chef.averageRating.toFixed(2);
       }
-    if(!chef.reviews || chef.reviews.length === 0){
+    else if(!chef.reviews || chef.reviews.length === 0){
         return 0;
       }
     const total = chef.reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
@@ -110,6 +110,7 @@ function PageHeader({handleSearch}) {
 }
 
 function SearchPage(props) {
+
   return (
     <div>
       <PageHeader handleSearch={props.handleSearch}/>

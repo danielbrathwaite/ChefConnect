@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
 import MenuPage from "./MenuPage";
+import OrderForm from './OrderForm';
 
 
 function MyApp() {
@@ -176,6 +177,7 @@ function addAuthHeader(otherHeaders = {}) {
         <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
         <Route path="/profile" element={<ChefProfile handleSubmit={addChefProfile}/>} />
         <Route path="/chef/:id/menu" element={<MenuPage/>} /> 
+        <Route path="/placeorder" element={<OrderForm/>} />
       </Routes>
     </Router>
   );

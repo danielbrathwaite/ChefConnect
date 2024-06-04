@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import Table from "./Table";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ReactStars from "react-rating-stars-component";
+import OrderForm from "./OrderForm";
 
 function Reviews({reviews})
 {
@@ -122,10 +123,16 @@ function ReviewForm({chefId})
 
 function OrderButton({chefId})
 {
+  const navigate = useNavigate();
+
+  const placeOrder = () => {
+    navigate(`/placeorder`, { state: { chefId: chefId } });
+  };
+
   return(
     <div>
       <center>
-        <button> Place an Order </button>
+        <button onClick={placeOrder}> Place an Order </button>
       </center>
     </div>
   )

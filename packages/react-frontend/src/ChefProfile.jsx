@@ -52,7 +52,7 @@ function ChefProfile(props) {
   useEffect(() => {
     if(submitted)
       {
-        navigate('/search');
+        navigate('/search', { state: { usertype: "chef" } });
       }
   },[submitted, navigate]);
 
