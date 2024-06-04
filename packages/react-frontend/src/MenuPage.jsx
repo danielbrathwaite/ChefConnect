@@ -141,7 +141,6 @@ function MenuPage()
 {
   const location = useLocation();
   const { menuData = [], chef = {} } = location.state || {};
-  console.log(location.state);
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
