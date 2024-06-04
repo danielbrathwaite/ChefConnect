@@ -5,7 +5,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ReactStars from "react-rating-stars-component";
-import OrderForm from "./OrderForm";
 
 function Reviews({reviews})
 {
@@ -137,11 +136,34 @@ function OrderButton({chefId})
     </div>
   )
 }
+
+function ViewButton({chefId})
+  {
+    const navigate = useNavigate();
+    const handleViewProfile = () => {
+      navigate(`/viewprofile`, { state: { chefId: chefId } });
+    };
+  
+    return(
+      <div>
+        <center>
+          <button onClick={handleViewProfile}>View Profile </button>
+        </center>
+      </div>
+    )
+  }
+
 function MenuPage()
 {
   const location = useLocation();
   const { menuData = [], chef = {} } = location.state || {};
   const [reviews, setReviews] = useState([]);
+  const [menuu, setMenuu] = useState([]);
+  
+  useEffect(() => {
+    // Scroll to the top whenever the component mounts
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const getReviews = async (chefId) => {
@@ -156,15 +178,32 @@ function MenuPage()
         console.error('Error fetching search results:', error);
       }
     };
-
     getReviews(chef._id);
   }, [chef._id]);
 
+
+    useEffect(() => {
+      const getMenuu = async (chefId) => {
+        try {
+          const API_PREFIX = "http://localhost:8000";
+          const response = await fetch(`${API_PREFIX}/chefs/${chefId}/menu`);
+          if(response.status === 200){
+            const menuu = await response.json();
+            setMenuu(menuu);
+          }
+        } catch (error) {
+          console.error('Error fetching search results:', error);
+        }
+      }; getMenuu(chef._id);
+    }, [chef._id]);
+  
+
   return (
     <div className="container">
+      <ViewButton chefId={chef._id}/>
       <MenuPageHeader chef={chef}/>
       <div>
-      <Table menu={menuData}/>
+      <Table menu={menuu}/>
       </div>
       <OrderButton chefId={chef._id}/>
       <Reviews reviews={reviews}/>

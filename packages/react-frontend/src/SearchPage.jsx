@@ -9,15 +9,17 @@ function ChefCard({ chef }) {
   const navigate = useNavigate();
 
   function getAverageRating(chef) {
-    if(chef.averageRating)
-      {
-        return chef.averageRating.toFixed(2);
-      }
-    else if(!chef.reviews || chef.reviews.length === 0){
+    // if(chef.averageRating)
+    //   {
+    //     return chef.averageRating.toFixed(2);
+    //   }
+    // else 
+    if(!chef.reviews || chef.reviews.length === 0){
         return 0;
       }
     const total = chef.reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
     const avgRating = total / chef.reviews.length;
+    console.log("chef", chef);
     return avgRating.toFixed(2);
   }
 

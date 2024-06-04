@@ -5,10 +5,11 @@ import { useLocation , Link } from "react-router-dom";
 
 function OrderForm(props) {
   const location = useLocation();
+  console.log(location.state.chefId);
   const [order, setOrder] = useState({
     user: "663d0eb03cdff92fbc1f0dee",
     chef: location.state.chefId,
-    people: 2,
+    people: 0,
     orderDirections: "",
     status: "pending",
     phoneNumber: "",
@@ -44,12 +45,12 @@ function OrderForm(props) {
     const { name, value } = event.target;
     setOrder((prevOrder) => ({
       ...prevOrder,
-      [name]: value,
+      [name]: name === "asap" ? event.target.value === "true" : value,
     }));
   }
 
   return (
-    <div>
+    <div className="container">
       <Link to="/search">Search</Link>
       <h1> Place an Order</h1>
       <form>
@@ -61,6 +62,14 @@ function OrderForm(props) {
           value={order.orderDirections}
           onChange={handleChange}
         />
+        <label htmlFor="people">Number of People:</label>
+        <input
+          type="number"
+          name="people"
+          id="people"
+          value={order.people}
+          onChange={handleChange}
+        />
         <label htmlFor="phoneNumber">Phone Number:</label>
         <input
           type="text"
@@ -69,6 +78,11 @@ function OrderForm(props) {
           value={order.phoneNumber}
           onChange={handleChange}
         />
+        <label htmlFor="asap"> I need food asap </label>
+        <select name="asap" id="asap" onChange={handleChange}>
+          <option value={true}>yes</option>
+          <option value={false}>no</option>
+        </select>
         <input type="button" value="Submit" onClick={submitOrder} />
       </form>
     </div>

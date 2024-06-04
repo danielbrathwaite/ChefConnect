@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import ChefProfile from './ChefProfile';
 import HomePage from './HomePage'
 import Layout from './Layout';
-import ProfileDone from './ProfileDone';
+import ProfileDone from './ViewProfile';
 import Login from './Login';
 import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -11,6 +11,7 @@ import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
 import MenuPage from "./MenuPage";
 import OrderForm from './OrderForm';
+import ViewProfile from './ViewProfile';
 
 
 function MyApp() {
@@ -178,6 +179,7 @@ function addAuthHeader(otherHeaders = {}) {
         <Route path="/profile" element={<ChefProfile handleSubmit={addChefProfile}/>} />
         <Route path="/chef/:id/menu" element={<MenuPage/>} /> 
         <Route path="/placeorder" element={<OrderForm/>} />
+        <Route path="/viewprofile" element={<ViewProfile/>} />
       </Routes>
     </Router>
   );
