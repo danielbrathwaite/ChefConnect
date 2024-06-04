@@ -45,7 +45,6 @@ app.post('/chefs', async (req, res) => {
   }
   else{
     profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
-    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
   }
     const newChef = {
       email,
