@@ -3,23 +3,26 @@ import React from "react";
 function TableHeader() {
   return (
     <thead>
-      <tr>s
+      <tr>
         <th>Name</th>
-        <th> Availability </th>
         <th> Price</th>
         <th> Cuisine</th>
+        <th> Description</th>
+        <th> Availability </th>
       </tr>
     </thead>
   );
 }
 
-function TableBody(props) {
-  const rows = props.characterData.map((row, index) => {
+function TableBody({menu}) {
+  const rows = menu.map((row, index) => {
     return (
       <tr key={index}>
-        <td>{row.name}</td>
-        <td>{row.availability}</td>
+        <td>{row.foodName}</td>
+        <td>{row.price}</td>
         <td>{row.cuisine}</td>
+        <td>{row.description}</td>
+        <td>{row.availability ? "Available" : "Not Available"}</td>
         <td>
           <button>Add to cart</button>
         </td>
@@ -29,12 +32,12 @@ function TableBody(props) {
   return <tbody>{rows}</tbody>;
 }
 
-function Table(props) {
+function Table({menu}) {
   return (
     <table>
       <TableHeader />
       <TableBody
-        characterData={props.menuData}
+        menu={menu}
       />
     </table>
   );

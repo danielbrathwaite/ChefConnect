@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
+import MenuPage from "./MenuPage"
+import { useNavigate } from "react-router-dom";
 
 function ChefCard({ chef }) {
+  const [menuData, setMenuData] = useState(null);
+  const [selectedChef, setSelectedChef] = useState(null);
+  const navigate = useNavigate();
 
   function getAverageRating(reviews) {
     if(!reviews || reviews.length === 0){
@@ -11,20 +16,36 @@ function ChefCard({ chef }) {
     return avgRating;
   }
 
+  function getMenu(chefId)
+  {
+    const API_PREFIX = "http://localhost:8000";
+    fetch(`${API_PREFIX}/chefs/${chefId}/menu`)
+    .then((response) => {
+      if(response.status === 200){
+        return response.json()
+      }
+    })
+    .then((menuData) => { 
+      navigate(`/chef/${chefId}/menu`, { state: { menuData, chef } });
+      console.log(menuData);
+      setMenuData(menuData);
+    })
+    .catch((error) => {
+      console.error('Error fetching search results:', error);
+    });
+  }
+
   return (
     <div className="card">
-      <div className="card-header">
-        <h2>
-          {chef.firstName} {chef.lastName}
-        </h2>
-
-        <img src={chef.profilePicture} className="chef-image"/>
-      </div>
+      <h2>
+        {chef.firstName} {chef.lastName}
+      </h2>
+      <img src={chef.profilePicture} className="chef-image"/>
       <p>Price: {chef.price}</p>
-      <p>Cuisines: {chef.cuisines.join(', ')}</p>
+      <p>Cuisines: {chef.cuisines}</p>
       <p>Location: {chef.location}</p>
       <p> Average Rating: {getAverageRating(chef.reviews)}</p> 
-      <button>Menu</button>
+      <button onClick={() => getMenu(chef._id)}>Menu</button>
     </div>
   );
 }

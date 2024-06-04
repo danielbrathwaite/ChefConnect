@@ -30,13 +30,13 @@ app.use(express.json());
 // to a url, stores that url in the database  
 app.post('/chefs', async (req, res) => {
   try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, image, foodGallery} = req.body;
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, reviews, profilePic, foodGallery} = req.body;
     console.log("sent in json", req.body)
     //console.log("image", image)
     // Upload image to Cloudinary
-    let profilePicture;
-    if (image != null){
-    const uploadResponse = await cloudinary.uploader.upload(image, {
+    let profilePicture
+    if (profilePic != null){
+    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
       folder: 'chefs',
       use_filename: true,
       unique_filename: false,
@@ -45,7 +45,7 @@ app.post('/chefs', async (req, res) => {
     profilePicture = uploadResponse.secure_url;
   }
   else{
-    profilePicture = 'noimage';
+    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
   }
     const newChef = {
       email,
@@ -73,12 +73,12 @@ app.post('/chefs', async (req, res) => {
 //IN PROGRESS, updates the chef profile
 app.put('/chefs/:id', async (req, res) => {
   try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, image } = req.body;
+    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, profilePic } = req.body;
   
     // Upload image to Cloudinary
     let profilePicture;
-    if (image != null){
-    const uploadResponse = await cloudinary.uploader.upload(image, {
+    if (profilePic != null){
+    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
       folder: 'chefs',
       use_filename: true,
       unique_filename: false,
@@ -109,7 +109,6 @@ app.put('/chefs/:id', async (req, res) => {
       price,
       profilePicture
     };
-    console.log("cheef", newChef)
     await chefService.addChef(newChef);
 
     res.status(201).json({ message: 'Chef created successfully', chef: newChef });
@@ -397,6 +396,13 @@ app.get("/chefs/:id", (req, res) => {
   });
 });
 
+app.post("/chefs", (req, res) => {
+  const chef = req.body;
+  chefService.addChef(chef).then((savedChef) => {
+    if (savedChef) res.status(201).send(savedChef);
+    else res.status(500).end();
+  });
+});
 
 app.get("/chefs", (req, res) => {
   const name = req.query.name;
@@ -428,9 +434,6 @@ app.post("/signup", registerUser);
 
 app.post("/login", loginUser);
 
-
-app.listen(port, () => {
-  console.log(
-    `Example app listening at http://localhost:${port}`
-  );
+app.listen(process.env.PORT || port, () => {
+  console.log("REST API is listening.");
 });

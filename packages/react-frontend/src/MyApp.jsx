@@ -5,24 +5,14 @@ import HomePage from './HomePage'
 import Layout from './Layout';
 import ProfileDone from './ProfileDone';
 import Login from './Login';
-import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
+import MenuPage from "./MenuPage";
 
 
 function MyApp() {
-  const [chefData, setChefData] = useState([
-    {
-      firstName: "Chef",
-      lastName: "Bob", // the rest of the data
-      price: "$",
-      cuisines: "Italian",
-      location: "New York",
-      rating: "5",
-      profilePicture: "j@gmail.com",
-    }
-  ]);
+  const [chefData, setChefData] = useState([]);
   const [chefProfiles, setChefProfiles] = useState([]);
   const updateList = (newChefProfile) => {
     setChefProfiles([...chefProfiles, newChefProfile]);
@@ -32,7 +22,7 @@ function MyApp() {
   const [token, setToken] = useState(INVALID_TOKEN);
   const [message, setMessage] = useState("");
 
-  const API_PREFIX = "http://localhost:8000";
+  const API_PREFIX = "https://chefconnect.azurewebsites.net/";
   
 
   useEffect(() => {
@@ -167,6 +157,7 @@ function addAuthHeader(otherHeaders = {}) {
   }
 }
  
+
   return (
     <Router>
       <Routes>
@@ -175,6 +166,7 @@ function addAuthHeader(otherHeaders = {}) {
         <Route path="/signup" element={<SignUp handleSubmit={signupUser} buttonLabel="Sign Up" />} />
         <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
         <Route path="/profile" element={<ChefProfile handleSubmit={addChefProfile}/>} />
+        <Route path="/chef/:id/menu" element={<MenuPage/>} /> 
       </Routes>
     </Router>
   );
