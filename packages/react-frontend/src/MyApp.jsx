@@ -22,7 +22,7 @@ function MyApp() {
   const [token, setToken] = useState(INVALID_TOKEN);
   const [message, setMessage] = useState("");
 
-  const API_PREFIX = "https://chefconnect.azurewebsites.net/";
+  const API_PREFIX = "https://chefconnect.azurewebsites.net";
   
 
   useEffect(() => {
