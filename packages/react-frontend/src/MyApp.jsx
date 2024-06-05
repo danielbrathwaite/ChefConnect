@@ -115,6 +115,10 @@ function MyApp() {
         return response;
       }
     })
+    .then((createdChef) => {
+      setChefData((prevChefData) => [...prevChefData, createdChef]);
+      return { status: 201 };
+    })
     .catch((error) => {
       setMessage(`Profile Error: ${error}`);
     });
@@ -135,7 +139,6 @@ function MyApp() {
     const minPrice = event.target.elements['min-price'].value;
     const maxPrice = event.target.elements['max-price'].value;
     const minRating = event.target.elements['rating-filter'].checked;
-    console.log(minRating);
     let url= `${API_PREFIX}/search?cuisine=${searchCuisine}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     if(minRating)
     {

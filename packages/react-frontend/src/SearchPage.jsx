@@ -51,7 +51,7 @@ function ChefCard({ chef }) {
       </h2>
       <img src={chef.profilePicture} className="chef-image"/>
       <p>Price: {chef.price}</p>
-      <p>Cuisines: {chef.cuisines.join(", ")}</p>
+      <p>Cuisines: {chef.cuisines ? chef.cuisines.join(", ") : ""}</p>
       <p>Location: {chef.location}</p>
       <p> Average Rating: </p> 
       <ReactStars
