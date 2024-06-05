@@ -5,21 +5,24 @@ import ReactStars from "react-rating-stars-component";
 
 function ChefCard({ chef }) {
   const [menuData, setMenuData] = useState(null);
-  const [avgRating, setAvgRating] = useState(null);
+  // const [avgRating, setAvgRating] = useState(null);
   const navigate = useNavigate();
 
+
+  const avgRating = getAverageRating(chef);
+
+
   function getAverageRating(chef) {
-    // if(chef.averageRating)
-    //   {
-    //     return chef.averageRating.toFixed(2);
-    //   }
-    // else 
+    if(chef.averageRating)
+      {
+        return chef.averageRating.toFixed(2);
+      }
+    else 
     if(!chef.reviews || chef.reviews.length === 0){
         return 0;
       }
     const total = chef.reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
     const avgRating = total / chef.reviews.length;
-    console.log("chef", chef);
     return avgRating.toFixed(2);
   }
 
@@ -34,7 +37,6 @@ function ChefCard({ chef }) {
     })
     .then((menuData) => { 
       navigate(`/chef/${chefId}/menu`, { state: { menuData, chef } });
-      console.log(menuData);
       setMenuData(menuData);
     })
     .catch((error) => {
@@ -51,16 +53,15 @@ function ChefCard({ chef }) {
       <p>Price: {chef.price}</p>
       <p>Cuisines: {chef.cuisines.join(", ")}</p>
       <p>Location: {chef.location}</p>
-      <p> Average Rating: 
+      <p> Average Rating: </p> 
       <ReactStars
         count={5}
-        value={parseFloat(getAverageRating(chef))}
+        value={parseFloat(avgRating)}
         size={24}
         activeColor="#ffd700"
         edit={false}
         isHalf={true}
       />
-      </p> 
       <button onClick={() => getMenu(chef._id)}>Menu</button>
     </div>
   );
@@ -113,6 +114,7 @@ function PageHeader({handleSearch}) {
 
 function SearchPage(props) {
 
+  const location = useLocation();
   return (
     <div>
       <PageHeader handleSearch={props.handleSearch}/>

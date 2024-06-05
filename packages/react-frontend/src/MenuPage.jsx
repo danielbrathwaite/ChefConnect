@@ -38,13 +38,16 @@ function MenuPageHeader({ chef })
 
   return(
     <div className="container">
+      <ViewButton chefId={chef._id}/> 
         <h2>
           Chef {chef.firstName} {chef.lastName}'s Menu 
         </h2>
         <img src={chef.profilePicture} className="chef-image"/>
+        <p>{chef.location}</p>
         {chef.foodGallery && chef.foodGallery.length > 0 && (
         <>
         <h3 className="gallery-title">Food Gallery</h3>
+        <div className="gallery-carousel">
         <Slider {...settings}>
           {chef.foodGallery.map((imageUrl, index) => (
             <div className="carousel-item" key={index}>
@@ -52,6 +55,7 @@ function MenuPageHeader({ chef })
             </div>
           ))}
         </Slider>
+        </div>
         </>
         )}
     </div>
@@ -145,10 +149,8 @@ function ViewButton({chefId})
     };
   
     return(
-      <div>
-        <center>
+      <div className="view-profile-button">
           <button onClick={handleViewProfile}>View Profile </button>
-        </center>
       </div>
     )
   }
@@ -156,10 +158,11 @@ function ViewButton({chefId})
 function MenuPage()
 {
   const location = useLocation();
-  const { menuData = [], chef = {} } = location.state || {};
+  const { menuData = [], chef = {} } = location.state || {}; // idk put something here
   const [reviews, setReviews] = useState([]);
   const [menuu, setMenuu] = useState([]);
-  
+  // console.log("at the menu page, i'm a ", location.state.usertype);
+
   useEffect(() => {
     // Scroll to the top whenever the component mounts
     window.scrollTo(0, 0);
@@ -200,7 +203,7 @@ function MenuPage()
 
   return (
     <div className="container">
-      <ViewButton chefId={chef._id}/>
+      <ViewButton chefId={chef._id}/> 
       <MenuPageHeader chef={chef}/>
       <div>
       <Table menu={menuu}/>

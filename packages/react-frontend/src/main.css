@@ -1222,12 +1222,12 @@ caption {
 }
 
 .chef-image{
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+  width: 100px; 
+  height: 100px; 
   border-radius: 50%;
-  margin-bottom: 16px;
-  margin-left: 16px;
+  object-fit: cover; 
+  border: 5px solid #fff; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 .card h2 {
   margin: 0;
@@ -1242,6 +1242,10 @@ caption {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.gallery-carousel {
+  margin-bottom: 50px; /* Add margin to create space above the carousel */
 }
 
 .carousel-item img {
@@ -1297,6 +1301,18 @@ caption {
   text-align: center; 
 }
 
+.view-profile-button {
+  position: absolute;
+  top: 10px; /* Adjust the distance from the top as needed */
+  right: 10px; /* Adjust the distance from the right as needed */
+}
+
+.menu-header-container {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
 /*
    * Navigation
