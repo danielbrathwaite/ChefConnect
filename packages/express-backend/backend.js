@@ -23,7 +23,13 @@ const port = 8000;
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(cors());
+
+const corsOptions = {
+  origin: 'https://mango-mud-0948e8e1e.5.azurestaticapps.net',
+  // origin: ['https://exemple.vercel.app', 'https://another-domain.com'],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // gets the inputted form, stores base64 image in cloudinary and converts it 
