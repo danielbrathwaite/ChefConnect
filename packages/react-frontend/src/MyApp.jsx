@@ -23,7 +23,7 @@ function MyApp() {
   const [message, setMessage] = useState("");
 
   // const API_PREFIX = "chefconnect.azurewebsites.net";
-  const API_PREFIX = "http://chefconnectbackend.azurewebsites.net";
+  const API_PREFIX = "https://chefconnectbackend.azurewebsites.net";
   // const API_PREFIX = "http://localhost:8000";
   
 
