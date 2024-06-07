@@ -3,12 +3,14 @@ import React, {useState, useEffect} from 'react';
 import ChefProfile from './ChefProfile';
 import HomePage from './HomePage'
 import Layout from './Layout';
-import ProfileDone from './ProfileDone';
+import ProfileDone from './ViewProfile';
 import Login from './Login';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
 import MenuPage from "./MenuPage";
+import OrderForm from './OrderForm';
+import ViewProfile from './ViewProfile';
 
 
 function MyApp() {
@@ -114,6 +116,10 @@ function MyApp() {
         return response;
       }
     })
+    .then((createdChef) => {
+      setChefData((prevChefData) => [...prevChefData, createdChef]);
+      return { status: 201 };
+    })
     .catch((error) => {
       setMessage(`Profile Error: ${error}`);
     });
@@ -127,12 +133,19 @@ function MyApp() {
 
     return promise;
   }
+  
   function handleSearch(event){
     event.preventDefault();
     const searchCuisine = event.target.elements['search-input'].value;
     const minPrice = event.target.elements['min-price'].value;
     const maxPrice = event.target.elements['max-price'].value;
-    fetch(`${API_PREFIX}/search?cuisine=${searchCuisine}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
+    const minRating = event.target.elements['rating-filter'].checked;
+    let url= `${API_PREFIX}/search?cuisine=${searchCuisine}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    if(minRating)
+    {
+      url= `${API_PREFIX}/search?cuisine=${searchCuisine}&minPrice=${minPrice}&maxPrice=${maxPrice}&minRating=4`;
+    }
+    fetch(url)
     .then((response) => {
       if(response.status === 200){
         return response.json()
@@ -169,6 +182,8 @@ function addAuthHeader(otherHeaders = {}) {
         <Route path="/search" element={<SearchPage chefData={chefData} handleSearch={handleSearch}/>} />
         <Route path="/profile" element={<ChefProfile handleSubmit={addChefProfile}/>} />
         <Route path="/chef/:id/menu" element={<MenuPage/>} /> 
+        <Route path="/placeorder" element={<OrderForm/>} />
+        <Route path="/viewprofile" element={<ViewProfile/>} />
       </Routes>
     </Router>
   );

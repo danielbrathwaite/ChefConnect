@@ -11,9 +11,9 @@ function SignUp(props) {
   const navigate = useNavigate();
   const signupReroute = (creds) => {
     if(creds.usertype === "chef"){
-      navigate('/profile', { state: { username: creds.username, password: creds.pwd } });
+      navigate('/profile', { state: { username: creds.username, password: creds.pwd, usertype: creds.usertype } });
     } else {
-      navigate('/search');
+      navigate('/search', {state: {usertype: creds.usertype }});
     }
   }
 

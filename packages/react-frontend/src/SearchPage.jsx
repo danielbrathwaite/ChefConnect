@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from "react";
 import MenuPage from "./MenuPage"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 
 function ChefCard({ chef }) {
   const [menuData, setMenuData] = useState(null);
-  const [selectedChef, setSelectedChef] = useState(null);
+  // const [avgRating, setAvgRating] = useState(null);
   const navigate = useNavigate();
 
-  function getAverageRating(reviews) {
-    if(!reviews || reviews.length === 0){
-        return "No ratings";
+
+  const avgRating = getAverageRating(chef);
+
+
+  function getAverageRating(chef) {
+    if(chef.averageRating)
+      {
+        return chef.averageRating.toFixed(2);
       }
-    const total = reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
-    const avgRating = total / reviews.length;
-    return avgRating;
+    else 
+    if(!chef.reviews || chef.reviews.length === 0){
+        return 0;
+      }
+    const total = chef.reviews.reduce((accumulator, currReview) => accumulator + currReview.rating, 0);
+    const avgRating = total / chef.reviews.length;
+    return avgRating.toFixed(2);
   }
 
   function getMenu(chefId)
@@ -27,7 +37,6 @@ function ChefCard({ chef }) {
     })
     .then((menuData) => { 
       navigate(`/chef/${chefId}/menu`, { state: { menuData, chef } });
-      console.log(menuData);
       setMenuData(menuData);
     })
     .catch((error) => {
@@ -42,9 +51,17 @@ function ChefCard({ chef }) {
       </h2>
       <img src={chef.profilePicture} className="chef-image"/>
       <p>Price: {chef.price}</p>
-      <p>Cuisines: {chef.cuisines}</p>
+      <p>Cuisines: {chef.cuisines ? chef.cuisines.join(", ") : ""}</p>
       <p>Location: {chef.location}</p>
-      <p> Average Rating: {getAverageRating(chef.reviews)}</p> 
+      <p> Average Rating: </p> 
+      <ReactStars
+        count={5}
+        value={parseFloat(avgRating)}
+        size={24}
+        activeColor="#ffd700"
+        edit={false}
+        isHalf={true}
+      />
       <button onClick={() => getMenu(chef._id)}>Menu</button>
     </div>
   );
@@ -58,7 +75,7 @@ function PageHeader({handleSearch}) {
   return (
     <div className="container">
       <center>
-        <h1> Chefs List</h1>
+        <h1> ChefConnect</h1>
       </center>
       <form className="small-container" onSubmit={handleSearch}>
         <input
@@ -81,21 +98,23 @@ function PageHeader({handleSearch}) {
           onChange={(e) => setMaxPrice(e.target.value)}
           />
         </div>
-        <button type="submit"> Search</button>
-        {/* <div>
+        <div>
           <label>
           <input type="checkbox" id="rating-filter" name="rating-filter" 
             checked={minRating} 
-            onClick={(e) => setMinRating(e.target.checked)}/>
-            4 stars and up
+            onChange={(e) => setMinRating(e.target.checked)}/>
+             4 stars and up 
           </label>
-        </div> */}
+        </div>
+        <button type="submit"> Search</button>
       </form>
     </div>
   );
 }
 
 function SearchPage(props) {
+
+  const location = useLocation();
   return (
     <div>
       <PageHeader handleSearch={props.handleSearch}/>

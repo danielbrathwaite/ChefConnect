@@ -1,5 +1,8 @@
 # ChefConnect
 
+### ChefConnect 
+* ChefConnect is a a web app that allows freelance chefs to connect with customers who would prefer more personal and higher quality meals compared to restaurants in delivery apps
+
 ## Table Of Contents
 
 [Sequence Diagrams for Authentication](#sequence-diagrams-for-authentication)
@@ -56,3 +59,5 @@ All JavaScript code is linted with [Prettier](https://prettier.io/).
   * [Python](https://www.python.org/dev/peps/pep-0008/)
   * [Java](https://google.github.io/styleguide/javaguide.html)
   * [C++](https://google.github.io/styleguide/cppguide.html)
+
+
