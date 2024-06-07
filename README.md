@@ -7,6 +7,8 @@
 
 [Sequence Diagrams for Authentication](#sequence-diagrams-for-authentication)
 
+[UML Diagram](#uml-Diagram)
+
 [Contributing to ChefConnect](#contributing-to-chefconnect)
 
   * [What should I know before I get started?](#what-should-i-know-before-i-get-started)
@@ -21,6 +23,10 @@
 ## Sequence Diagrams for Authentication
 
 https://www.figma.com/board/hAoqxbnJ5ubIZGkPl2w3VY/Authentication-sequence-diagram?node-id=0%3A1&t=r94iSdXCvnV2THBE-1
+
+## UML Diagram
+
+https://github.com/danielbrathwaite/ChefConnect/blob/main/uml_diagram.md
 
 ## Contributing to ChefConnect
 
