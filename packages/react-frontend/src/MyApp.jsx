@@ -5,7 +5,6 @@ import HomePage from './HomePage'
 import Layout from './Layout';
 import ProfileDone from './ViewProfile';
 import Login from './Login';
-import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./SignUp";
 import SearchPage from "./SearchPage";
@@ -25,7 +24,9 @@ function MyApp() {
   const [token, setToken] = useState(INVALID_TOKEN);
   const [message, setMessage] = useState("");
 
-  const API_PREFIX = "http://localhost:8000";
+  // const API_PREFIX = "chefconnect.azurewebsites.net";
+  const API_PREFIX = "https://chefconnectbackend.azurewebsites.net";
+  // const API_PREFIX = "http://localhost:8000";
   
 
   useEffect(() => {
