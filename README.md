@@ -54,9 +54,13 @@ Daniel Brathwaite
 Currently no IDE plugins are necessary to host ChefConnect locally. There are, however some useful tools that can streamline your development process. For example, setting up [VSCode with Prettier](https://blog.yogeshchavan.dev/automatically-format-code-on-file-save-in-visual-studio-code-using-prettier) will help you automatically format your code correctly. Past that, you can check out the NPM dependencies you'll need by checking the top and sub-level package.json files in the [ChefConnect repo](https://github.com/danielbrathwaite/ChefConnect).
 
 ### Running Cypress Tests
-To run cypress tests, do:
+To run cypress tests in browser, do:
 ```sh
 npm run cy:open
+```
+To run cypress tests without UI, do:
+```sh
+npm run cy:run
 ```
 
 ### Coding Standards
