@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config()
 
-//changed idea: chef makes meals like courses, so set amount price per person and 
-// in the order form, user can pick the amount of people to serve and a box for typing directions about the order. 
-// it is up to the chef to reject / accept orders within the expiration date, asap field indicates asap delivery
+//ichef makes serves meals like courses, so set amount price per person and 
+// user can pick the amount of people to serve 
 const foodOrderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,

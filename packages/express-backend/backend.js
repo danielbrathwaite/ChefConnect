@@ -1,11 +1,9 @@
 import express, { query } from "express";
 import cors from "cors";
-import multer from "multer";
 import bodyParser from "body-parser"
 import userService from "./services/user-service.js";
 import chefService from "./services/chef-service.js";
 import { authenticateUser, registerUser, loginUser } from "./auth.js";
-import chefList from "./models/chefList.js";
 import Chef from "./models/chef.js";
 import menuItem from "./models/menuItem.js";
 import foodOrder from "./models/foodOrder.js";
@@ -25,10 +23,6 @@ const port = 8000;
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-// const corsOptions = {
-//   origin: 'https://mango-mud-0948e8e1e.5.azurestaticapps.net',
-//   // origin: ['https://exemple.vercel.app', 'https://another-domain.com'],
-// };
 
 app.use(cors());
 app.use(express.json());
@@ -74,53 +68,6 @@ app.post('/chefs', async (req, res) => {
   }
 });
 
-//IN PROGRESS, updates the chef profile
-app.put('/chefs/:id', async (req, res) => {
-  try {
-    const {email, password, firstName, lastName, location, phoneNumber, cuisines, price, profilePic } = req.body;
-  
-    // Upload image to Cloudinary
-    let profilePicture;
-    if (profilePic != null){
-    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
-      folder: 'chefs',
-      use_filename: true,
-      unique_filename: false,
-    });
-
-    profilePicture = uploadResponse.secure_url;
-  }
-  else{
-    profilePicture = 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp';
-  }
-  if (profilePicture != 'https://res.cloudinary.com/dslmarna0/image/upload/v1716579874/chefs/noProfilePic.webp')
-    {
-      profilePicture = cloudinary.url(profilePicture, {
-        width: 200,
-        height: 200,
-        crop: 'fill'
-      });
-      
-    } 
-    const newChef = {
-      email,
-      password,
-      firstName,
-      lastName,
-      location,
-      phoneNumber,
-      cuisines,
-      price,
-      profilePicture
-    };
-    await chefService.addChef(newChef);
-
-    res.status(201).json({ message: 'Chef created successfully', chef: newChef });
-  } catch (error) {
-    console.error('Error uploading image or saving data:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
 
 //sends foodorders of requested chef
 app.get('/chefs/:id/order', async (req, res) => {
@@ -217,6 +164,7 @@ app.post('/chefs/:id/gallery', async (req, res) => {
   }
 });
 
+//deleting an image from a gallery
 app.delete('/chefs/:id/gallery', async (req, res) => {
   try {
     const id = req.params["id"];
@@ -259,6 +207,7 @@ app.get("/users", (req, res) => {
     });
 });
 
+//searching chefs
 app.get("/search", async (req, res) => {
   try {
     // Extract query parameters from the request
@@ -329,7 +278,7 @@ app.get("/search", async (req, res) => {
   }
 });
 
-
+//gets the menu of a chef
 app.get("/chefs/:chefId/menu", async (req, res) => {
   try {
     const chefId = req.params.chefId;
@@ -362,6 +311,7 @@ app.post('/chefs/:id/menu', async (req, res) => {
   }
 });
 
+//gets the reviews of a chef
 app.get("/chefs/:chefId/reviews", async (req, res) => {
   try {
     const chefId = req.params.chefId;
@@ -376,6 +326,7 @@ app.get("/chefs/:chefId/reviews", async (req, res) => {
   }
 });
 
+//post a review for a chef
 app.post("/chefs/:chefId/reviews", async (req, res) => {
   try {
     const chefId = req.params.chefId;
@@ -407,6 +358,7 @@ app.post("/chefs/:chefId/reviews", async (req, res) => {
   }
 });
 
+//get a user profile
 app.get("/users/:id", (req, res) => {
     const id = req.params["userId"];
     userService.findUserById(id).then((result) => {
@@ -415,7 +367,8 @@ app.get("/users/:id", (req, res) => {
       else res.send({ users_list: result });
     });
 });
-  
+
+//upload a user profile
 app.post("/users", authenticateUser, (req, res) => {
     const user = req.body;
     userService.addUser(user).then((savedUser) => {
@@ -423,7 +376,8 @@ app.post("/users", authenticateUser, (req, res) => {
       else res.status(500).end();
     });
 });
-  
+
+//delete a user profile
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
   if (id === undefined)
@@ -436,6 +390,7 @@ app.delete("/users/:id", (req, res) => {
   ;
 }});
 
+//get a chef by id
 app.get("/chefs/:id", (req, res) => {
   const id = req.params["id"];
   chefService.findChefById(id).then((chef) => {
@@ -456,14 +411,8 @@ app.get("/chefs/:id", (req, res) => {
   });
 });
 
-app.post("/chefs", (req, res) => {
-  const chef = req.body;
-  chefService.addChef(chef).then((savedChef) => {
-    if (savedChef) res.status(201).send(savedChef);
-    else res.status(500).end();
-  });
-});
 
+//get a list of chefs
 app.get("/chefs", (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
@@ -478,6 +427,7 @@ app.get("/chefs", (req, res) => {
   });
 });
 
+//delete a chef
 app.delete("/chefs/:id", (req, res) => {
 const id = req.params["id"];
 if (id === undefined)
