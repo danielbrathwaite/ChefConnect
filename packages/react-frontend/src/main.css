@@ -219,7 +219,6 @@ button::-moz-focus-inner,
   padding: 0;
 }
 
-
 /**
    * Restore the focus styles unset by the previous rule.
    */
@@ -569,11 +568,11 @@ dd {
   margin-bottom: 0.5rem;
 }
 
-.price-filter{
-  display:flex;
+.price-filter {
+  display: flex;
 }
 
-.price-filter input{
+.price-filter input {
   margin-right: 10px;
 }
 
@@ -599,10 +598,9 @@ dd {
   max-width: 1000px;
 }
 
-.dropdown{
+.dropdown {
   max-width: 200px;
 }
-
 
 .content-section {
   padding: 30px 0;
@@ -811,77 +809,76 @@ dd {
    * Buttons
    */
 
+.button,
+a.button,
+button:not(.slick-arrow),
+[type="submit"]:not(.slick-arrow),
+[type="reset"]:not(.slick-arrow),
+[type="button"]:not(.slick-arrow) {
+  -webkit-appearance: none;
+  display: inline-block;
+  border: 1px solid #98f780;
+  border-radius: 4px;
+  background: #98f780;
+  color: #02270d;
+  font-weight: 600;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: 1rem;
+  text-transform: none;
+  padding: 0.75rem 1.25rem;
+  margin: 0 0 0.5rem 0;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1;
+}
 
-   .button,
-   a.button,
-   button:not(.slick-arrow),
-   [type="submit"]:not(.slick-arrow),
-   [type="reset"]:not(.slick-arrow),
-   [type="button"]:not(.slick-arrow) {
-     -webkit-appearance: none;
-     display: inline-block;
-     border: 1px solid #98f780;
-     border-radius: 4px;
-     background: #98f780;
-     color: #02270d;
-     font-weight: 600;
-     font-family: 
-       -apple-system, 
-       BlinkMacSystemFont, 
-       Helvetica Neue, 
-       Helvetica, 
-       Arial, 
-       sans-serif;
-     font-size: 1rem;
-     text-transform: none;
-     padding: 0.75rem 1.25rem;
-     margin: 0 0 0.5rem 0;
-     vertical-align: middle;
-     text-align: center;
-     cursor: pointer;
-     text-decoration: none;
-     line-height: 1;
-   }
-   
-   .button:hover,
-   a.button:hover,
-   button:not(.slick-arrow):hover,
-   [type="submit"]:not(.slick-arrow):hover,
-   [type="reset"]:not(.slick-arrow):hover,
-   [type="button"]:not(.slick-arrow):hover {
-     border: 1px solid #98f780;
-     background: #98f780;
-     color: #02270d;
-     text-decoration: none;
-   }
-   
-   .button:focus,
-   .button:active,
-   a.button:focus,
-   a.button:active,
-   button:not(.slick-arrow):focus,
-   button:not(.slick-arrow):active,
-   [type="submit"]:not(.slick-arrow):focus,
-   [type="submit"]:not(.slick-arrow):active,
-   [type="reset"]:not(.slick-arrow):focus,
-   [type="reset"]:not(.slick-arrow):active,
-   [type="button"]:not(.slick-arrow):focus,
-   [type="button"]:not(.slick-arrow):active {
-     border: 1px solid #98f780;
-     background: #98f780;
-     color: #02270d;
-     text-decoration: none;
-   }
-   
-   .button::-moz-focus-inner,
-   a.button::-moz-focus-inner,
-   button:not(.slick-arrow)::-moz-focus-inner,
-   [type="submit"]::-moz-focus-inner,
-   [type="reset"]::-moz-focus-inner,
-   [type="button"]::-moz-focus-inner {
-     border: 0;
-     padding: 0;
-   }
+.button:hover,
+a.button:hover,
+button:not(.slick-arrow):hover,
+[type="submit"]:not(.slick-arrow):hover,
+[type="reset"]:not(.slick-arrow):hover,
+[type="button"]:not(.slick-arrow):hover {
+  border: 1px solid #98f780;
+  background: #98f780;
+  color: #02270d;
+  text-decoration: none;
+}
+
+.button:focus,
+.button:active,
+a.button:focus,
+a.button:active,
+button:not(.slick-arrow):focus,
+button:not(.slick-arrow):active,
+[type="submit"]:not(.slick-arrow):focus,
+[type="submit"]:not(.slick-arrow):active,
+[type="reset"]:not(.slick-arrow):focus,
+[type="reset"]:not(.slick-arrow):active,
+[type="button"]:not(.slick-arrow):focus,
+[type="button"]:not(.slick-arrow):active {
+  border: 1px solid #98f780;
+  background: #98f780;
+  color: #02270d;
+  text-decoration: none;
+}
+
+.button::-moz-focus-inner,
+a.button::-moz-focus-inner,
+button:not(.slick-arrow)::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="button"]::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
 
 .accent-button,
 a.accent-button {
@@ -949,23 +946,22 @@ a.full-button {
 }
 
 .slick-prev {
-  left: 300px; 
+  left: 300px;
 }
 
 .slick-next {
-  right: 300px; 
+  right: 300px;
 }
 
 .slick-prev.slick-arrow:before,
 .slick-next.slick-arrow:before {
-  display: block; 
+  display: block;
 }
 
 .slick-prev.slick-arrow,
 .slick-next.slick-arrow {
-  display: block; 
+  display: block;
 }
-
 
 /**
    * Forms
@@ -1221,13 +1217,13 @@ caption {
   align-items: center;
 }
 
-.chef-image{
-  width: 100px; 
-  height: 100px; 
+.chef-image {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  object-fit: cover; 
-  border: 5px solid #fff; 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  object-fit: cover;
+  border: 5px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .card h2 {
   margin: 0;
@@ -1291,14 +1287,13 @@ caption {
   margin-top: 5px;
 }
 
-
 .review-rating {
   margin-top: 5px;
   font-style: italic;
 }
 
 .gallery-title {
-  text-align: center; 
+  text-align: center;
 }
 
 .view-profile-button {

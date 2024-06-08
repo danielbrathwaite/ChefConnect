@@ -12,7 +12,7 @@ function TableHeader() {
   );
 }
 
-function TableBody({menu}) {
+function TableBody({ menu }) {
   const rows = menu.map((row, index) => {
     return (
       <tr key={index}>
@@ -25,13 +25,11 @@ function TableBody({menu}) {
   return <tbody>{rows}</tbody>;
 }
 
-function Table({menu}) {
+function Table({ menu }) {
   return (
     <table>
       <TableHeader />
-      <TableBody
-        menu={menu}
-      />
+      <TableBody menu={menu} />
     </table>
   );
 }

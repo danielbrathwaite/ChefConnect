@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-
 function Login(props) {
   const [creds, setCreds] = useState({
     username: "",
@@ -9,7 +8,7 @@ function Login(props) {
   });
 
   const navigate = useNavigate();
-  const loginReroute = () => navigate('/search');
+  const loginReroute = () => navigate("/search");
 
   return (
     <div class="small-container">
@@ -53,14 +52,13 @@ function Login(props) {
   }
 
   function submitForm() {
-    props.handleSubmit(creds)
-      .then((response) => {
-        if (response.status === 200) {
-          loginReroute();
-        } else {
-          // Handle bad login
-        }
-      });
+    props.handleSubmit(creds).then((response) => {
+      if (response.status === 200) {
+        loginReroute();
+      } else {
+        // Handle bad login
+      }
+    });
     setCreds({ username: "", pwd: "" });
   }
 }

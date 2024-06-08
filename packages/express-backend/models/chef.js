@@ -48,22 +48,22 @@ const ChefSchema = new mongoose.Schema(
     },
     cuisines: {
       type: [String],
-      required: false
+      required: false,
     },
     price: {
       type: Number,
-      required: true
+      required: true,
     },
     reviews: {
-        type: [ReviewSchema],
-        required: false
+      type: [ReviewSchema],
+      required: false,
     },
     profilePicture: {
-      type: String
+      type: String,
     },
     foodGallery: {
-      type: [String]
-    }
+      type: [String],
+    },
   },
   { collection: "chefs_list" },
 );

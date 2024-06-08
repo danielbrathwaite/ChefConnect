@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocation , Link } from "react-router-dom";
-
+import { useLocation, Link } from "react-router-dom";
 
 function OrderForm(props) {
   const location = useLocation();
@@ -15,12 +14,12 @@ function OrderForm(props) {
     phoneNumber: "",
     orderDate: new Date().toISOString().split("T")[0],
     expirationDate: new Date().toISOString().split("T")[0],
-    asap: false
+    asap: false,
   });
 
   function submitOrder() {
     const chefId = location.state.chefId;
-    console.log(order)
+    console.log(order);
     const API_PREFIX = "http://localhost:8000"; // Adjust this to your backend API URL
     fetch(`${API_PREFIX}/chefs/${chefId}/order`, {
       method: "POST",
@@ -54,7 +53,7 @@ function OrderForm(props) {
       <Link to="/search">Search</Link>
       <h1> Place an Order</h1>
       <form>
-      <label htmlFor="directions">Please leave any special directions:</label>
+        <label htmlFor="directions">Please leave any special directions:</label>
         <textarea
           type="text"
           name="orderDirections"

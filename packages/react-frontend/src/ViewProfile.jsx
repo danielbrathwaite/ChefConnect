@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocation , Link } from "react-router-dom";
-
+import { useLocation, Link } from "react-router-dom";
 
 function ViewProfile() {
   const location = useLocation();
@@ -17,7 +16,7 @@ function ViewProfile() {
 
   const addItem = async (e) => {
     e.preventDefault();
-      const newItem = {
+    const newItem = {
       chef: chefId,
       foodName: foodName,
       availability: availability,
@@ -43,14 +42,13 @@ function ViewProfile() {
         setCuisine("");
         setDescription("");
       } else {
-        console.error('Failed to add review');
+        console.error("Failed to add review");
       }
     } catch (error) {
-      console.error('Error submitting review:', error);
+      console.error("Error submitting review:", error);
     }
   };
 
-  
   return (
     <div className="container">
       <h2>Add Menu Item</h2>
@@ -97,7 +95,7 @@ function ViewProfile() {
         ></textarea>
 
         <button type="submit">Add Item</button>
-        </form>
+      </form>
     </div>
   );
 }
