@@ -92,11 +92,14 @@ describe('Visiting a chef\'s profile', () => {
     cy.url().should('include', '/menu');
   });
 
-  it('should place an order', () => {
-    cy.visit('http://localhost:5173/placeorder');
+  it('should place an order and submit the order form successfully (alice waters as example)', () => {
+    cy.visit('http://localhost:5173/search');
+    cy.get('.card').contains('Alice Waters').parents('.card').within(() => {
+      cy.contains('button', 'Menu').click();
+    });
 
-  
-  it('should fill out and submit the order form successfully', () => {
+    cy.contains('button', 'Place an Order').click();  
+    cy.url().should('include', '/placeorder');
         cy.get('#orderDirections').type('Would not like any utensils.');
         cy.get('#people').clear().type('4');
         cy.get('#phoneNumber').clear().type('1234567890');
@@ -107,33 +110,28 @@ describe('Visiting a chef\'s profile', () => {
         }).as('submitOrder');
         cy.get('input[value="Submit"]').click();
         cy.wait('@submitOrder').its('response.statusCode').should('eq', 201);
-      });
+      
     });
 
     
-  
-
-/*
-  //everything below here is not done
-  it('should make a review and verify it appears', () => {
+    it('should make a review', () => {
     //gordon ramsay's profile
-    cy.visit('http://localhost:5173/chef/664fbcf07a311cad9a3e4088/menu');
-    const getRandomString = () => Math.random().toString(36).substring(2, 10);
-    cy.get('input[name="username"]').type(newUser.email);
-    cy.get('input[type="submit"]').click();
+    cy.visit('http://localhost:5173/search');
+    cy.get('.card').contains('Gordon Ramsay').parents('.card').within(() => {
+      cy.contains('button', 'Menu').click();
+    });
 
-    cy.visit('http://localhost:5173/chef/664fbcf07a311cad9a3e4088/menu');
+    cy.intercept('POST', 'http://localhost:8000/chefs/664fbcf07a311cad9a3e4088/reviews', {
+      statusCode: 201,
+      body: { success: true },
+    }).as('postReview');
+
+    cy.get('input[name="comments"]').type('Great experience!');
+    cy.get('.react-stars span').eq(3).click(); 
+    cy.get('input[type="submit"]').click();
+    cy.wait('@postReview').its('response.statusCode').should('eq', 201);
 
   });
   
-  it('should place an order', () => {
-    cy.visit('http://localhost:5173/login');
-
-    cy.get('input[name="username"]').type(newUser.email);
-    cy.get('input[name="password"]').type(newUser.password);
-
-    cy.get('input[type="button"]').click();
-
-    cy.url().should('include', '/search');
-  });*/
+  
 });

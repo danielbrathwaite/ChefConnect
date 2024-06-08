@@ -36,7 +36,6 @@ function MenuPageHeader({ chef }) {
 
   return (
     <div className="container">
-      <ViewButton chefId={chef._id} />
       <h2>
         Chef {chef.firstName} {chef.lastName}'s Menu
       </h2>
