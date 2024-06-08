@@ -75,21 +75,45 @@ describe('Filtering chefs', () => {
 
 });
 
+
+
 describe('Visiting a chef\'s profile', () => {
 
   it('should visit a profile from search', () => {
     cy.visit('http://localhost:5173/search');
 
 
-    cy.get('.card').then((el) => {
-      cy.wrap(el).first().within(() => {
+    cy.get('.card').first().within(() => {
         cy.contains('button', 'Menu').click();
       });
-    });
+    
     
 
     cy.url().should('include', '/menu');
   });
+
+  it('should place an order', () => {
+    cy.visit('http://localhost:5173/placeorder');
+
+  
+  it('should fill out and submit the order form successfully', () => {
+        cy.get('#orderDirections').type('Would not like any utensils.');
+        cy.get('#people').clear().type('4');
+        cy.get('#phoneNumber').clear().type('1234567890');
+        cy.get('#asap').select('yes');
+        cy.intercept('POST', 'http://localhost:8000/chefs/664fbcf07a311cad9a3e408a/order', {
+          statusCode: 201,
+          body: { success: true },
+        }).as('submitOrder');
+        cy.get('input[value="Submit"]').click();
+        cy.wait('@submitOrder').its('response.statusCode').should('eq', 201);
+      });
+    });
+
+    
+  
+
+/*
   //everything below here is not done
   it('should make a review and verify it appears', () => {
     //gordon ramsay's profile
@@ -111,5 +135,5 @@ describe('Visiting a chef\'s profile', () => {
     cy.get('input[type="button"]').click();
 
     cy.url().should('include', '/search');
-  });
+  });*/
 });
