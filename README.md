@@ -1,7 +1,8 @@
 # ChefConnect
 
-### ChefConnect 
-* ChefConnect is a a web app that allows freelance chefs to connect with customers who would prefer more personal and higher quality meals compared to restaurants in delivery apps
+### ChefConnect
+
+- ChefConnect is a a web app that allows freelance chefs to connect with customers who would prefer more personal and higher quality meals compared to restaurants in delivery apps
 
 ## Table Of Contents
 
@@ -11,14 +12,14 @@
 
 [Contributing to ChefConnect](#contributing-to-chefconnect)
 
-  * [What should I know before I get started?](#what-should-i-know-before-i-get-started)
-    * [Setup and IDE Plugins](#setup-and-ide-plugins)
+- [What should I know before I get started?](#what-should-i-know-before-i-get-started)
 
-  * [Coding Standards](#coding-standards)
+  - [Setup and IDE Plugins](#setup-and-ide-plugins)
 
-  * [Styleguides](#styleguides)
-    * [JavaScript Formatting Styleguide](#javascript-formatting-styleguide)
+- [Coding Standards](#coding-standards)
 
+- [Styleguides](#styleguides)
+  - [JavaScript Formatting Styleguide](#javascript-formatting-styleguide)
 
 ## Sequence Diagrams for Authentication
 
@@ -60,10 +61,8 @@ All JavaScript code is linted with [Prettier](https://prettier.io/).
 
 #### Coding Style Guides by Language
 
-  * [JavaScript](https://google.github.io/styleguide/jsguide.html)
-  * [React/JavaScript](https://airbnb.io/javascript/react/)
-  * [Python](https://www.python.org/dev/peps/pep-0008/)
-  * [Java](https://google.github.io/styleguide/javaguide.html)
-  * [C++](https://google.github.io/styleguide/cppguide.html)
-
-
+- [JavaScript](https://google.github.io/styleguide/jsguide.html)
+- [React/JavaScript](https://airbnb.io/javascript/react/)
+- [Python](https://www.python.org/dev/peps/pep-0008/)
+- [Java](https://google.github.io/styleguide/javaguide.html)
+- [C++](https://google.github.io/styleguide/cppguide.html)

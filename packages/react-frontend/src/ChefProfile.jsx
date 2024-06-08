@@ -1,11 +1,10 @@
 // src/Form.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocation , Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 // code for file upload is borrowed from pluralsight.com
-function FileUploader({onFileSelect})
-{
+function FileUploader({ onFileSelect }) {
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -15,22 +14,19 @@ function FileUploader({onFileSelect})
     });
   };
 
-    const handleFileInput = (event) => {
-      const file = event.target.files[0];
-      convertToBase64(file).then(base64 => {
-        console.log(base64); 
-        onFileSelect(base64)
-      });
-        
-    }
-    return (
-        <div>
-          <input type="file" onChange={handleFileInput} />
-        </div>
-      );
+  const handleFileInput = (event) => {
+    const file = event.target.files[0];
+    convertToBase64(file).then((base64) => {
+      console.log(base64);
+      onFileSelect(base64);
+    });
+  };
+  return (
+    <div>
+      <input type="file" onChange={handleFileInput} />
+    </div>
+  );
 }
-
-
 
 function ChefProfile(props) {
   const location = useLocation();
@@ -50,12 +46,10 @@ function ChefProfile(props) {
   });
 
   useEffect(() => {
-    if(submitted)
-      {
-        navigate('/search', { state: { usertype: "chef" } });
-      }
-  },[submitted, navigate]);
-
+    if (submitted) {
+      navigate("/search", { state: { usertype: "chef" } });
+    }
+  }, [submitted, navigate]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -68,9 +62,8 @@ function ChefProfile(props) {
   function submitProfile() {
     const email = location.state.username;
     const password = location.state.password;
-    const updatedProfile = {...profile,  email, password};
-    props.handleSubmit(updatedProfile)
-    .then((response) => {
+    const updatedProfile = { ...profile, email, password };
+    props.handleSubmit(updatedProfile).then((response) => {
       if (response.status === 201) {
         setSubmitted(true);
       } else {
@@ -130,25 +123,25 @@ function ChefProfile(props) {
         />
         <label htmlFor="cuisines">Cuisine(s):</label>
         <input
-            type="text"
-            name="cuisines"
-            id="cuisines"
-            value={profile.cuisines}
-            onChange={handleChange}
-          />
-      <label htmlFor="price">Price:</label>
+          type="text"
+          name="cuisines"
+          id="cuisines"
+          value={profile.cuisines}
+          onChange={handleChange}
+        />
+        <label htmlFor="price">Price:</label>
         <input
-            type="text"
-            name="price"
-            id="price"
-            value={profile.price}
-            onChange={handleChange}
-          />
+          type="text"
+          name="price"
+          id="price"
+          value={profile.price}
+          onChange={handleChange}
+        />
         <label htmlFor="profilePic">Profile Picture:</label>
         <FileUploader
           onFileSelect={(file) => setProfile({ ...profile, profilePic: file })}
         />
-          <input type="button" value="Submit" onClick={submitProfile} />
+        <input type="button" value="Submit" onClick={submitProfile} />
       </form>
     </div>
   );

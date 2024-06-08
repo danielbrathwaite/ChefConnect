@@ -23,8 +23,8 @@ const menuItemSchema = new mongoose.Schema(
       required: true,
     },
     cuisine: {
-        type: [String],
-        required: false,
+      type: [String],
+      required: false,
     },
     description: {
       type: String,

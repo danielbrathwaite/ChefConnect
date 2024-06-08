@@ -10,12 +10,18 @@ function SignUp(props) {
 
   const navigate = useNavigate();
   const signupReroute = (creds) => {
-    if(creds.usertype === "chef"){
-      navigate('/profile', { state: { username: creds.username, password: creds.pwd, usertype: creds.usertype } });
+    if (creds.usertype === "chef") {
+      navigate("/profile", {
+        state: {
+          username: creds.username,
+          password: creds.pwd,
+          usertype: creds.usertype,
+        },
+      });
     } else {
-      navigate('/search', {state: {usertype: creds.usertype }});
+      navigate("/search", { state: { usertype: creds.usertype } });
     }
-  }
+  };
 
   return (
     <div className="small-container">
@@ -38,7 +44,12 @@ function SignUp(props) {
           onChange={handleChange}
         />
         <label htmlFor="usertype"> I'm here to ...</label>
-        <select name="usertype" id="usertype" value={creds.usertype} onChange={handleChange}>
+        <select
+          name="usertype"
+          id="usertype"
+          value={creds.usertype}
+          onChange={handleChange}
+        >
           <option value="chef">be a chef</option>
           <option value="user">browse</option>
         </select>
@@ -67,15 +78,14 @@ function SignUp(props) {
   }
 
   function submitForm() {
-    props.handleSubmit(creds)
-      .then((response) => {
-        if (response.status === 201) {
-          signupReroute(creds);
-        } else {
-          // Handle bad login
-        }
-      });
-    setCreds({ username: "", pwd: "" , usertype: "chef"});
+    props.handleSubmit(creds).then((response) => {
+      if (response.status === 201) {
+        signupReroute(creds);
+      } else {
+        // Handle bad login
+      }
+    });
+    setCreds({ username: "", pwd: "", usertype: "chef" });
   }
 }
 export default SignUp;
