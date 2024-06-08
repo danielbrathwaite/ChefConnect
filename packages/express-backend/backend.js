@@ -175,12 +175,10 @@ app.post("/chefs/:id/gallery", async (req, res) => {
     chef.foodGallery = chef.foodGallery.concat(galleryUrls);
     await chef.save();
 
-    res
-      .status(201)
-      .json({
-        message: "Gallery posted successfully.",
-        foodGallery: chef.foodGallery,
-      });
+    res.status(201).json({
+      message: "Gallery posted successfully.",
+      foodGallery: chef.foodGallery,
+    });
   } catch (error) {
     console.error("Error getting images:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -210,12 +208,10 @@ app.delete("/chefs/:id/gallery", async (req, res) => {
 
     await chef.save();
 
-    res
-      .status(200)
-      .json({
-        message: "Item deleted successfully.",
-        foodGallery: chef.foodGallery,
-      });
+    res.status(200).json({
+      message: "Item deleted successfully.",
+      foodGallery: chef.foodGallery,
+    });
   } catch (error) {
     console.error("Error deleting item:", error);
     res.status(500).json({ message: "Internal server error" });
